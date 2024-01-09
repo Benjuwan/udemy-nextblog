@@ -1,17 +1,23 @@
 import Link from 'next/link'
 import { ArticleList } from './components/ArticleList'
+import { getAllArticles } from '@/blogApis'
 
-export default function Home() {
-  const benjuwan_defaultAnkerStyle:object = {
+/* 非同期処理（getAllArticles）のために async 付与。Next.js 13 からはトップレベルで await を使用できる */
+export default async function Home() {
+  const benjuwan_defaultAnkerStyle: object = {
     "color": "skyblue",
     "textDecoration": "underLine"
   }
+
+  /* npx json-server src/data/posts.json --port 3001 でサーバーを立ち上げてからでないとエラーが出るので注意。ターミナル1：npx json-server..., ターミナル2：npm run dev という立ち上げフロー */
+  const articles = await getAllArticles();
+  // console.log(articles);
 
   return (
     <div className="md:flex">
       <section className="w-full md:w-2/3 flex flex-col items-center px-3">
         {/* section 要素は（親の）width に対して 2/3 の範囲を占有 */}
-        <ArticleList />
+        <ArticleList articles={articles} />
       </section>
 
       <aside className="w-full md:w-2/3 flex flex-col items-center px-3">
