@@ -11,9 +11,33 @@
 ターミナル1で json-server を立ち上げてからでないとエラーが出るので注意。
 
 
-### メモ
+## 目次
+[Next.js](#nextjs)
+[メモ](#メモ)
+[備忘録・所感](#備忘録・所感)
+
+### Next.js
+- `Next.js`最新情報<br />[The latest Next.js news](https://nextjs.org/blog)
+
+- Get Start<br />
+[Installation](https://nextjs.org/docs/getting-started/installation)
+
+```
+npx create-next-app@latest
+```
+
+- ファイル構成（`src`ディレクトリ配下）
+    - `app`ディレクトリ（配下）は原則サーバー側でレンダリングされる（サーバー側でデータ取得を行うほうがパフォーマンス的に早いため）。デフォルトでは`use server`状態。<br />
+    ファイルの先頭に`use client`を記述するとクライアントコンポーネントとなる（クライアントコンポーネントでしか`State`, `Effect`などの`Hooks`が扱えない）。
+
+    - `app/page.tsx`<br />`Next 13`でいうところの`index.tsx`の役割。各ディレクトリごとに用意することで**ファイルベースルーティング**の恩恵を得られる。
+
+    - `app/layout.tsx`<br />`Next 13`でいうところの`_documet.tsx`や`_app.tsx`の役割。`Next 14`で新たに設けられたファイルで、各ページ（ディレクトリごとの`page.tsx`）の**レイアウト情報（`meta`情報など）の管理**を担う。`layout.tsx`は入れ子も可能。
+
+    参考記事：[Next.js 13 Template と Layout の使い分け](https://zenn.dev/cybozu_frontend/articles/8caf1decb1e82c)
+
 - `app/page.tsx`と`use client`クライアントコンポーネントの`export`について<br />
-`export default コンポーネント名;`で行う。※ `app/page.tsx`についてはデフォルト（ファイル制作時）のままにしておくのが無難
+`export default コンポーネント名;`で行う。<br />※ `app/page.tsx`についてはデフォルト（ファイル制作時）のままにしておくのが無難。
 
 ```
 /* 任意のコンポーネント名を付けてもok（パスカルケースが無難）*/
@@ -26,7 +50,7 @@ const HogePage = () => {
 export default HogePage;
 ```
 
-`export default コンポーネント名;`で行わないとエラーとなる（`Next.js`に怒られる）。
+`export default コンポーネント名;`で行わないとエラーとなる（`Next.js`に怒られる）
 
 - `SSG`, `SSR`, `ISR`はページ・コンポーネント単位で使い分けられる。
 
@@ -55,6 +79,13 @@ export default HogePage;
     // Similar to `getStaticProps` with the `revalidate` option --- to Next 12.
     fetch(URL, { next: { revalidate: 10 } }); // --- from Next 13 against ISR
     ```
+
+- エラーページ（※ファイル名は`error.tsx`で固定）<br />
+`app/error.tsx`という配置（フォルダ構成）にしないと機能しない。
+
+
+### メモ
+- サーバーコンポーネントでの`console.log('ログ出力')`は、ターミナルに表示される
 
 - `npm`と`npx`の ver 確認<br />
 `node`をインストールしていれば下記コマンドで ver 確認できる。
@@ -111,30 +142,6 @@ yarn -v
     ```
 
 
-### Next.js
-- `Next.js`最新情報<br />[The latest Next.js news](https://nextjs.org/blog)
-
-- Get Start<br />
-[Installation](https://nextjs.org/docs/getting-started/installation)
-
-```
-npx create-next-app@latest
-```
-
-- ファイル構成（`src`ディレクトリ配下）
-    - `app`ディレクトリ（配下）は原則サーバー側でレンダリングされる（サーバー側でデータ取得を行うほうがパフォーマンス的に早いため）。デフォルトでは`use server`状態。<br />
-    ファイルの先頭に`use client`を記述するとクライアントコンポーネントとなる（クライアントコンポーネントでしか`State`, `Effect`などの`Hooks`が扱えない）。
-
-    - `app/page.tsx`<br />`Next 13`でいうところの`index.tsx`の役割。各ディレクトリごとに用意することで**ファイルベースルーティング**の恩恵を得られる。
-
-    - `app/layout.tsx`<br />`Next 13`でいうところの`_documet.tsx`や`_app.tsx`の役割。`Next 14`で新たに設けられたファイルで、各ページ（ディレクトリごとの`page.tsx`）の**レイアウト情報（`meta`情報など）の管理**を担う。`layout.tsx`は入れ子も可能。
-
-    参考記事：[Next.js 13 Template と Layout の使い分け](https://zenn.dev/cybozu_frontend/articles/8caf1decb1e82c)
-
-- エラーページ（※ファイル名は`error.tsx`で固定）<br />
-`app/error.tsx`という配置（フォルダ構成）にしないと機能しない。
-
-
 ### 備忘録・所感
 - 内部データはフェッチできない（外部データ：API しかフェッチできない）。外部データでも`CORS`でフェッチできない場合もある。
 
@@ -156,3 +163,5 @@ module.exports = nextConfig
 `Next.js`ではコンポーネント内で`lorem30`と記述し`Tab`キーを押すと、指定した数値分のワード数（先ほどの例では30単語・ワード）でダミーテキストを生成してくれる。
 
 - シリアライズ：文字列化すること
+
+- ユーティリティファースト：予め用意された`CSS`クラスを`HTML`に当てるだけでスタイルを適用させていく手法
