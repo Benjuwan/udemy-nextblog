@@ -1,9 +1,12 @@
 import Link from 'next/link'
 import { ArticleList } from './components/ArticleList'
 import { getAllArticles } from '@/blogApis'
+import { useFetchPost } from './hooks/useFetchIPost'
 
 /* 非同期処理（getAllArticles）のために async 付与。Next.js 13 からはトップレベルで await を使用できる */
 export default async function Home() {
+  const { fetchPost } = useFetchPost();
+
   const benjuwan_defaultAnkerStyle: object = {
     "color": "skyblue",
     "textDecoration": "underLine"
@@ -12,6 +15,21 @@ export default async function Home() {
   /* npx json-server src/data/posts.json --port 3001 でサーバーを立ち上げてからでないとエラーが出るので注意。ターミナル1：npx json-server..., ターミナル2：npm run dev という立ち上げフロー */
   const articles = await getAllArticles();
   // console.log(articles);
+
+  /* await 有りだと配列で取得できる */
+  // const fetchArticles = await fetchPost('http://localhost:3001/posts');
+  // fetchArticles.forEach(articleData => {
+  //   console.log(articleData);
+  // });
+
+  /* await 無しだと Promise として取得 */
+  const fetchArticles = fetchPost('http://localhost:3001/posts');
+  fetchArticles.then((articlesData) => {
+    // console.log(articlesData);
+    articlesData.forEach(articleData => {
+      console.log(articleData);
+    });
+  });
 
   return (
     <div className="md:flex">
