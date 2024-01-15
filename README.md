@@ -12,9 +12,9 @@
 
 
 ## 目次
-[Next.js](#nextjs)
-[メモ](#メモ)
-[備忘録・所感](#備忘録・所感)
+[Next.js](#nextjs)<br />
+[メモ](#メモ)<br />
+[備忘録・所感](#備忘録・所感)<br />
 
 ### Next.js
 - `Next.js`最新情報<br />[The latest Next.js news](https://nextjs.org/blog)
@@ -30,9 +30,9 @@ npx create-next-app@latest
     - `app`ディレクトリ（配下）は原則サーバー側でレンダリングされる（サーバー側でデータ取得を行うほうがパフォーマンス的に早いため）。デフォルトでは`use server`状態。<br />
     ファイルの先頭に`use client`を記述するとクライアントコンポーネントとなる（クライアントコンポーネントでしか`State`, `Effect`などの`Hooks`が扱えない）。
 
-    - `app/page.tsx`<br />`Next 13`でいうところの`index.tsx`の役割。各ディレクトリごとに用意することで**ファイルベースルーティング**の恩恵を得られる。
+    - `app/page.tsx`<br />`Next 12`でいうところの`index.tsx`の役割。各ディレクトリごとに用意することで**ファイルベースルーティング**の恩恵を得られる。
 
-    - `app/layout.tsx`<br />`Next 13`でいうところの`_documet.tsx`や`_app.tsx`の役割。`Next 14`で新たに設けられたファイルで、各ページ（ディレクトリごとの`page.tsx`）の**レイアウト情報（`meta`情報など）の管理**を担う。`layout.tsx`は入れ子も可能。
+    - `app/layout.tsx`<br />`Next 12`でいうところの`_documet.tsx`や`_app.tsx`の役割。`Next 13`で新たに設けられたファイルで、各ページ（ディレクトリごとの`page.tsx`）の**レイアウト情報（`meta`情報など）の管理**を担う。`layout.tsx`は入れ子も可能。
 
     参考記事：[Next.js 13 Template と Layout の使い分け](https://zenn.dev/cybozu_frontend/articles/8caf1decb1e82c)
 
@@ -83,6 +83,26 @@ export default HogePage;
 - エラーページ（※ファイル名は`error.tsx`で固定）<br />
 `app/error.tsx`という配置（フォルダ構成）にしないと機能しない。
 
+- `not-found` / `loading` ページも**ファイル名固定（`not-found.tsx` / `loading.tsx`）は同様**だが、これらは各ディレクトリごとに配置できる。
+
+- ファイルベースルーティング（詳細ページ）<br />
+`archives/[id]`（一覧dir / 個別詳細dir）という形になり、個別詳細dir内に設けた`page.tsx`でコンポーネントの引数に`props`としてデータを受けることで各種URLを取得できる。
+
+```
+const ArticleDetails = ({ params }: { params: { id: string } }) => {
+    return (
+        <>
+        ...JSX
+        </>
+    )
+}
+
+export default ArticleDetails;
+```
+
+`{ params }: { params: { id: string } }`<br />
+DB内の各種データ（オブジェクト）のidプロパティから各個別ページのURLを取得
+
 
 ### メモ
 - サーバーコンポーネントでの`console.log('ログ出力')`は、ターミナルに表示される
@@ -98,6 +118,10 @@ npx -v // npx の ver 確認
 npm install -g yarn // おまけ：yarn のインストール方法
 yarn -v
 ```
+
+- 極力サーバーコンポーネントで扱いたい<br />
+処理（`click`, `submit`など各種イベントハンドラーの使用はクライアントコンポーネントでしか不可能）によってクライアントコンポーネントにしなくてはならない場合はコンポーネントを別途作成する（親：サーバーcom、子：クライアントcom）<br />
+行いたい処理によっては`サーバー側`の処理と`クライアント側`の処理が競合して無限ループ的なエラーが生じる可能性もあるので、そういったケースを考慮する意味でもコンポーネント分けは大切。
 
 - `VS Code`の拡張機能<br />
     - [ES7+ React/Redux/React-Native snippets](https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets)
