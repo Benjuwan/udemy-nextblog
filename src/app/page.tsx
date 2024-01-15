@@ -27,7 +27,7 @@ export default async function Home() {
   fetchArticles.then((articlesData) => {
     // console.log(articlesData);
     articlesData.forEach(articleData => {
-      console.log(articleData);
+      // console.log(articleData);
     });
   });
 
