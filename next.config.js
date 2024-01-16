@@ -2,7 +2,12 @@
 const nextConfig = {
     // nextConfig によって、対象サイト（今回は unsplash ）からの画像データ取得許可を与える
     images: {
-        'domains': ['source.unsplash.com']
+        'remotePatterns': [
+            {
+                protocol: 'https',
+                hostname: 'source.unsplash.com'
+            }
+        ],
     }
 }
 

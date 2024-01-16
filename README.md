@@ -107,6 +107,9 @@ export default ArticleDetails;
 `{ params }: { params: { id: string } }`<br />
 DB内の各種データ（オブジェクト）のidプロパティから各個別ページのURLを取得
 
+- `pages/api`<br />
+`pages/api`に`index.ts`を用意して`API`作成を行う
+
 
 ### メモ
 - サーバーコンポーネントでの`console.log('ログ出力')`は、ターミナルに表示される
@@ -166,6 +169,11 @@ yarn -v
     ```
 
 
+### SupaBase
+- `SupaBase`のアクセスに必要な情報は`.env.local`及び`.env`ファイルに記載
+
+- `SupaBase`で作成したテーブルデータの取得（フェッチ）方法は、`SupaBase`のダッシュボードにある「テーブル」-「（右上にある）API Docs」から確認可能
+
 ### 備忘録・所感
 - 内部データはフェッチできない（外部データ：API しかフェッチできない）。外部データでも`CORS`でフェッチできない場合もある。
 
@@ -175,8 +183,18 @@ yarn -v
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     // nextConfig によって、対象サイト（今回は unsplash ）からの画像データ取得許可を与える
+
+    // The "images.domains" configuration is deprecated. Please use "images.remotePatterns" configuration instead.
+    // images: {
+    //     'domains': ['source.unsplash.com']
+    // }
     images: {
-        'domains': ['source.unsplash.com']
+        'remotePatterns': [
+            {
+                protocol: 'https',
+                hostname: 'source.unsplash.com'
+            }
+        ],
     }
 }
 

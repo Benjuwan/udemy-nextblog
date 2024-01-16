@@ -21,10 +21,10 @@
       "createdAt": "2023-07-16"
     },
     {
-      "id": "post-test",
-      "title": "記事投稿のテスト",
-      "content": "これは記事投稿テストです。\nThis is article posting test.\n\nplease ignore.",
-      "createdAt": "2024-01-15T09:09:09.670Z"
+      "id": "supabase-test",
+      "title": "supabaseの記事",
+      "content": "This reference documents every object and method available in Supabase's isomorphic JavaScript library, supabase-js. \n\nYou can use supabase-js to interact with your Postgres database, listen to database changes, invoke Deno Edge Functions,\n build login and user management functionality, and manage large files.",
+      "createdAt": "2024-01-16T08:17:29.611Z"
     }
   ]
 }
