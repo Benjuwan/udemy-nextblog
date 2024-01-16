@@ -27,6 +27,8 @@ yarn-error.log*
 
 # local env files
 .env*.local
+# 以下は自身で追加した内容（src/配下でないとあたらない）
+.env
 
 # vercel
 .vercel
