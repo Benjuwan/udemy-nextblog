@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { ArticleList } from './components/ArticleList'
 import { getAllArticles } from '@/blogApis'
 import { useFetchPost } from './hooks/useFetchIPost'
@@ -6,11 +5,6 @@ import { useFetchPost } from './hooks/useFetchIPost'
 /* 非同期処理（getAllArticles）のために async 付与。Next.js 13 からはトップレベルで await を使用できる */
 export default async function Home() {
   const { fetchPost } = useFetchPost();
-
-  const benjuwan_defaultAnkerStyle: object = {
-    "color": "skyblue",
-    "textDecoration": "underLine"
-  }
 
   /* npx json-server src/data/posts.json --port 3001 でサーバーを立ち上げてからでないとエラーが出るので注意。ターミナル1：npx json-server..., ターミナル2：npm run dev という立ち上げフロー */
   const articles = await getAllArticles();
@@ -65,7 +59,6 @@ export default async function Home() {
             </li>
           </ul>
         </div>
-        <Link href="/articles" style={benjuwan_defaultAnkerStyle}>to Articles Page</Link>
       </aside>
     </div>
   )
