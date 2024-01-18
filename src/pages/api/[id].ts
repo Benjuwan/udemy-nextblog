@@ -6,11 +6,12 @@ import { notFound } from "next/navigation";
 
 /* この動的関数ファイル（[id].ts）で Atom（というかライブラリ？）は使えない。使うと PUT や DELETE 処理でサーバー接続エラー（500）が発生してしまう */
 
-/* 今回は非同期処理（async / await）の関数にする */
+/* 関数宣言は以下の記述【export default async function handler】でないと機能しない */
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
+
     /**
      *【req.query】
      * HTTPリクエストのクエリパラメータを取得するために使用されます。
@@ -60,23 +61,21 @@ export default async function handler(
         * 通常、POSTリクエストやPUTリクエストのように、クライアントからサーバにデータを送信する場合に使用されます。
         * 例えば、HTMLフォームを使用してデータを送信し、そのデータをサーバで処理する場合にreq.bodyを使用することがあります。
         */
-        const { id, title, content } = req.body; // PUT は req.body で処理を進める
+        const { title, content } = req.body; // PUT は req.body で処理を進める
 
         const { data: putData, error: putError } = await supabase
             .from('benjuwan-next13-udemy-posts')
-            .update([{ id, title, content, createdAt: new Date().toISOString() }]).eq('id', id); // 個別記事のURLに基づいて処理を行う
+            .update([{ title, content, createdAt: new Date().toISOString() }]).eq('id', id); // 個別記事のURLに基づいて処理を行う
 
         if (putError) {
             return res.status(500).json({ error: putError.message }); // エラー時は 500 番を返す
         }
 
-        // console.log(putData, res.status(200).json(putData)); // null undefined 
-        console.log(title, content);
         return res.status(200).json(putData); // 問題ない場合は 200 番に、そして data を返す
     }
 
     else {
         throw new Error('page/api/[id].ts ERROR.');
     }
-
+    
 };

@@ -6,13 +6,12 @@ import { useRouter } from "next/navigation";
 export const DeleteBtn = ({ articleId }: { articleId: string }) => {
     const router = useRouter(); // リダイレクト処理
 
-    /* async / await 取っている */
-    const handleClickDelete = () => {
+    const handleClickDelete = async () => {
         /* deleteArticle：json-server 用 */
         // deleteArticle(articleId);
 
         const API_URL = process.env.NEXT_PUBLIC_SUPABASE_API_URL;
-        fetch(`${API_URL}/api/${articleId}`, {
+        await fetch(`${API_URL}/api/${articleId}`, {
             method: "DELETE", // delete なので DELETE、データの扱いに関する記述（headers, body, etc...）は不要
         });
 

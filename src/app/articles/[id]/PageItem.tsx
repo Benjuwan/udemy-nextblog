@@ -5,17 +5,11 @@ import { ChangeEvent, useState } from "react";
 import { articleType } from "@/types";
 import { UpdateBtn } from "@/app/components/UpdateBtn";
 
-/* 状態管理ライブラリ：Jotai */
-import { useAtom } from "jotai";
-import { updateContent, updateTitle } from "@/ts/atom";
-
 export const PageItem = ({ article }: { article: articleType }) => {
     const [edit, setEdit] = useState<boolean>(false);
     const changeEditMode: () => void = () => setEdit(!edit);
-
-    /* Jotai */
-    const [title, setTitle] = useAtom(updateTitle); // タイトル
-    const [content, setContent] = useAtom(updateContent); // 本文
+    const [title, setTitle] = useState<string>(''); // タイトル
+    const [content, setContent] = useState<string>(''); // 本文
 
     return (
         <>
@@ -44,6 +38,8 @@ export const PageItem = ({ article }: { article: articleType }) => {
             }
             <UpdateBtn
                 articleId={article.id}
+                updateTitle={title}
+                updateContent={content}
                 edit={edit}
                 changeEditMode={changeEditMode}
             />

@@ -3,31 +3,32 @@
 import { FC } from "react";
 import { useRouter } from "next/navigation";
 
-/* 状態管理ライブラリ：Jotai */
-import { updateContent, updateTitle } from "@/ts/atom";
-import { useAtom } from "jotai";
-
 type updateBtnPropsType = {
     articleId: string;
+    updateTitle: string;
+    updateContent: string;
     edit: boolean;
     changeEditMode: () => void;
 }
 
-export const UpdateBtn: FC<updateBtnPropsType> = ({ articleId, edit, changeEditMode }) => {
+export const UpdateBtn: FC<updateBtnPropsType> = (
+    {
+        articleId,
+        updateTitle,
+        updateContent,
+        edit,
+        changeEditMode
+    }
+) => {
     const router = useRouter(); // リダイレクト処理
 
-    /* Jotai */
-    const [updateTitleState] = useAtom(updateTitle);
-    const [updateContentState] = useAtom(updateContent);
-
-    /* async / await 取っている */
-    const handleClickUpdate = () => {
+    const handleClickUpdate = async () => {
         const id = articleId;
-        const title: string = updateTitleState;
-        const content: string = updateContentState;
+        const title: string = updateTitle;
+        const content: string = updateContent;
 
         const API_URL = process.env.NEXT_PUBLIC_SUPABASE_API_URL;
-        fetch(`${API_URL}/api/${articleId}`, {
+        await fetch(`${API_URL}/api/${articleId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
