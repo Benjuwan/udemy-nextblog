@@ -1,18 +1,20 @@
 # Udemy-NextBlog
  [【Next.js13】最新バージョンのNext.js13をマイクロブログ構築しながら基礎と本質を学ぶ講座](https://www.udemy.com/course/nextjs13_learning_with_microblog/)
 
-## Next 14
-現在（2023/12）の最新 ver は`Next 14`なので14で進めていく
-
-- 立ち上げ時の注意
+ - セクション5までの進行時における立ち上げ時の注意
     - ターミナル1：`npx json-server src/data/posts.json --port 3001`
     - ターミナル2：`npm run dev`という立ち上げフロー
 
 ターミナル1で json-server を立ち上げてからでないとエラーが出るので注意。
 
 
+## Next 14
+現在（2023/12）の最新 ver は`Next 14`なので14で進めていく
+
+
 ## 目次
 [Next.js](#nextjs)<br />
+[SupaBase](#supabase)<br />
 [メモ](#メモ)<br />
 [備忘録・所感](#備忘録・所感)<br />
 
@@ -107,12 +109,50 @@ export default ArticleDetails;
 `{ params }: { params: { id: string } }`<br />
 DB内の各種データ（オブジェクト）のidプロパティから各個別ページのURLを取得
 
-- `pages/api`<br />
+- APIの作成（`pages/api`）<br />
 `pages/api`に`index.ts`を用意して`API`作成を行う
+
+
+### SupaBase
+[そもそも`supabase`ってなんぞや？](https://qiita.com/kaho_eng/items/8a7faf77222a599fb31c#%E3%81%9D%E3%82%82%E3%81%9D%E3%82%82supabase%E3%81%A3%E3%81%A6%E3%81%AA%E3%82%93%E3%81%9E%E3%82%84)
+
+- `SupaBase`のアクセスに必要な情報は`.env.local`及び`.env`ファイルに記載
+
+- `SupaBase`で作成したテーブルデータの取得（フェッチ）方法は、`SupaBase`のダッシュボードにある「テーブル」-「（右上にある）`API Docs`」から確認可能
+
+- `RLS`（Row Level Security）について<br />
+[そもそも`RLS`とはなんぞや？](https://qiita.com/kaho_eng/items/6f9ac01d77ab198881f4#%E3%81%9D%E3%82%82%E3%81%9D%E3%82%82rls%E3%81%A8%E3%81%AF%E3%81%AA%E3%82%93%E3%81%9E%E3%82%84)
+
+- `POST`,`PUT`などデータを取り扱う際のデータ名に注意<br />
+テーブルデータ名（`body: JSON.stringify(...`）と（リクエストボディに渡す値の名前）`State`名は **【全く同じ】** にしないと機能しない。
+
+```
+const [id, setId] = useState<string>(''); // url
+const [title, setTitle] = useState<string>(''); // タイトル
+const [content, setContent] = useState<string>(''); // 本文
+...
+..
+.
+const API_URL = process.env.NEXT_PUBLIC_SUPABASE_API_URL;
+fetch(`${API_URL}/api/create`, {
+    method: "POST", // create なので POST
+    headers: {
+        "Content-Type": "application/json", // json 形式で扱うことを明記
+    },
+    body: JSON.stringify({ id, title, content }) // テーブルデータ名と（リクエストボディに渡す値の名前）State名は【全く同じ】にしないと機能しない
+});
+```
+
+- 動的関数ファイル（[id].ts）で Atom（というかライブラリ？）は使えない<br />
+使用しようとすると`PUT`や`DELETE`処理でサーバー接続エラー（500）が発生してしまう。
 
 
 ### メモ
 - サーバーコンポーネントでの`console.log('ログ出力')`は、ターミナルに表示される
+
+- 日時の表示調整<br />
+    - new Date(日時に関する変数または処理結果).toLocaleString(); // yyyy/mm/dd hh:mm:ss
+    - new Date(日時に関する変数または処理結果).toLocaleDateString(); // yyyy/mm/dd
 
 - `npm`と`npx`の ver 確認<br />
 `node`をインストールしていれば下記コマンドで ver 確認できる。
@@ -168,11 +208,6 @@ yarn -v
     npm run json-server
     ```
 
-
-### SupaBase
-- `SupaBase`のアクセスに必要な情報は`.env.local`及び`.env`ファイルに記載
-
-- `SupaBase`で作成したテーブルデータの取得（フェッチ）方法は、`SupaBase`のダッシュボードにある「テーブル」-「（右上にある）API Docs」から確認可能
 
 ### 備忘録・所感
 - 内部データはフェッチできない（外部データ：API しかフェッチできない）。外部データでも`CORS`でフェッチできない場合もある。

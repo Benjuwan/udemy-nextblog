@@ -1,14 +1,23 @@
 import { ArticleList } from './components/ArticleList'
 import { getAllArticles } from '@/blogApis'
 import { useFetchPost } from './hooks/useFetchIPost'
+import { articleType } from '@/types';
 
 /* 非同期処理（getAllArticles）のために async 付与。Next.js 13 からはトップレベルで await を使用できる */
 export default async function Home() {
   const { fetchPost } = useFetchPost();
 
-  /* npx json-server src/data/posts.json --port 3001 でサーバーを立ち上げてからでないとエラーが出るので注意。ターミナル1：npx json-server..., ターミナル2：npm run dev という立ち上げフロー */
-  const articles = await getAllArticles();
+  /* getAllArticles：json-server 用 */
+  // const articles = await getAllArticles();
   // console.log(articles);
+  
+  const API_URL = process.env.NEXT_PUBLIC_SUPABASE_API_URL;
+  /* フェッチするエンドポイントは http://localhost:3000/api という形になる（ディレクトリ構造が pages/api のため）*/
+  const res = await fetch(`${API_URL}/api`, { cache: "no-store" }); // SSR
+  const articles:articleType[] = await res.json();
+  // console.log(articles);
+
+
 
   /* await 有りだと配列で取得できる */
   // const fetchArticles = await fetchPost('http://localhost:3001/posts');
@@ -17,13 +26,16 @@ export default async function Home() {
   // });
 
   /* await 無しだと Promise として取得 */
-  const fetchArticles = fetchPost('http://localhost:3001/posts');
-  fetchArticles.then((articlesData) => {
-    // console.log(articlesData);
-    articlesData.forEach(articleData => {
-      // console.log(articleData);
-    });
-  });
+  // const fetchArticles = fetchPost('http://localhost:3001/posts');
+  // fetchArticles.then((articlesData) => {
+  //   console.log(articlesData);
+  //   articlesData.forEach(articleData => {
+  //     console.log(articleData);
+  //   });
+  // });
+
+
+
 
   return (
     <div className="md:flex">
