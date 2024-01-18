@@ -28,8 +28,8 @@ const createBlogPage = () => {
     const [title, setTitle] = useState<string>(''); // タイトル
     const [content, setContent] = useState<string>(''); // 本文
 
-    /* async / await を記述せず使用、form の送信イベント（記述内容をPOST）*/
-    const handleSubmit = (formElm: ChangeEvent<HTMLFormElement>) => {
+    /* form の送信イベント（記述内容をPOST）*/
+    const handleSubmit = async (formElm: ChangeEvent<HTMLFormElement>) => {
         formElm.preventDefault();
         // console.log(urlInput, titleInput, contentTextArea);
         setLoading(true);
@@ -39,7 +39,7 @@ const createBlogPage = () => {
 
         const API_URL = process.env.NEXT_PUBLIC_SUPABASE_API_URL;
         // pages/api/create.ts なのでエンドポイントは create
-        fetch(`${API_URL}/api/create`, {
+        await fetch(`${API_URL}/api/create`, {
             method: "POST", // create なので POST
             headers: {
                 "Content-Type": "application/json", // json 形式で扱うことを明記
