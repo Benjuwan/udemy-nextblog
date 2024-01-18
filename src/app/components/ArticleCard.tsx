@@ -24,7 +24,7 @@ export const ArticleCard = ({ article }: { article: articleType }) => {
                 <Link href={`articles/${article.id}`} className="text-3xl font-bold hover:text-gray-700 pb-4">
                     {article.title}
                 </Link>
-                <p className="text-sm pb-3">Published on {article.createdAt}</p>
+                <p className="text-sm pb-3">Published on {new Date(article.createdAt).toLocaleString()}</p>
                 <Link href={`articles/${article.id}`} className="pb-6">
                     {article.content.length > 70 ? `${article.content.slice(0, 70)}...` : article.content}
                 </Link>

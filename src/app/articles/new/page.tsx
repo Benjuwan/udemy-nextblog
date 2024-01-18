@@ -24,17 +24,30 @@ const createBlogPage = () => {
 
     const router = useRouter(); // リダイレクト処理
     const [loading, setLoading] = useState<boolean>(false);
-    const [urlInput, setUrlInput] = useState<string>(''); // url
-    const [titleInput, setTitleInput] = useState<string>(''); // タイトル
-    const [contentTextArea, setContentTextArea] = useState<string>(''); // 本文
+    const [id, setId] = useState<string>(''); // url
+    const [title, setTitle] = useState<string>(''); // タイトル
+    const [content, setContent] = useState<string>(''); // 本文
 
-    /* form の送信イベント（記述内容をPOST）*/
-    /* async / await 取っている */
+    /* async / await を記述せず使用、form の送信イベント（記述内容をPOST）*/
     const handleSubmit = (formElm: ChangeEvent<HTMLFormElement>) => {
         formElm.preventDefault();
         // console.log(urlInput, titleInput, contentTextArea);
         setLoading(true);
-        createArticle(urlInput, titleInput, contentTextArea);
+
+        /* json-server 用 */
+        // createArticle(urlInput, titleInput, contentTextArea);
+
+        const API_URL = process.env.NEXT_PUBLIC_SUPABASE_API_URL;
+        // pages/api/create.ts なのでエンドポイントは create
+        fetch(`${API_URL}/api/create`, {
+            method: "POST", // create なので POST
+            headers: {
+                "Content-Type": "application/json", // json 形式で扱うことを明記
+            },
+            body: JSON.stringify({ id, title, content }) // テーブルデータ名と（リクエストボディに渡す値の名前）State名は【全く同じ】にしないと機能しない
+        });
+
+
         setLoading(false);
         router.push('/'); // top へリダイレクト
         router.refresh(); // リダイレクト処理後のクリーンアップ
@@ -45,15 +58,15 @@ const createBlogPage = () => {
             <h2 className="text-2xl font-bold mb-4">ブログ新規作成</h2>
             <form className="bg-slate-200 p-6 rounded shadow-lg" onSubmit={handleSubmit}>
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">URL<input value={urlInput} onInput={(inputElm: ChangeEvent<HTMLInputElement>) => setUrlInput((_prevInputElmVal) => inputElm.target.value)} type="text" className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" /></label>
+                    <label className="block text-gray-700 text-sm font-bold mb-2">URL<input value={id} onInput={(inputElm: ChangeEvent<HTMLInputElement>) => setId((_prevInputElmVal) => inputElm.target.value)} type="text" className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" /></label>
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">タイトル<input value={titleInput} onInput={(inputElm: ChangeEvent<HTMLInputElement>) => setTitleInput((_prevInputElmVal) => inputElm.target.value)} type="text" className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" /></label>
+                    <label className="block text-gray-700 text-sm font-bold mb-2">タイトル<input value={title} onInput={(inputElm: ChangeEvent<HTMLInputElement>) => setTitle((_prevInputElmVal) => inputElm.target.value)} type="text" className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" /></label>
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">本文<textarea value={contentTextArea} onInput={(textAreaElm: ChangeEvent<HTMLTextAreaElement>) => setContentTextArea((_prevTextAreaElmVal) => textAreaElm.target.value)} className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" cols={30} rows={10}></textarea></label>
+                    <label className="block text-gray-700 text-sm font-bold mb-2">本文<textarea value={content} onInput={(textAreaElm: ChangeEvent<HTMLTextAreaElement>) => setContent((_prevTextAreaElmVal) => textAreaElm.target.value)} className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" cols={30} rows={10}></textarea></label>
                 </div>
 
                 <button
