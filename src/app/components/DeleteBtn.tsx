@@ -1,6 +1,6 @@
 "use client"
 
-import { deleteArticle } from "@/blogApis";
+import { deleteArticle } from "@/app/hooks/blogApis";
 import { useRouter } from "next/navigation";
 
 export const DeleteBtn = ({ articleId }: { articleId: string }) => {
@@ -11,7 +11,8 @@ export const DeleteBtn = ({ articleId }: { articleId: string }) => {
         // deleteArticle(articleId);
 
         const API_URL = process.env.NEXT_PUBLIC_SUPABASE_API_URL;
-        await fetch(`${API_URL}/api/${articleId}`, {
+        /* エンドポイント：app/api/article */
+        await fetch(`${API_URL}/api/article/${articleId}`, {
             method: "DELETE", // delete なので DELETE、データの扱いに関する記述（headers, body, etc...）は不要
         });
 

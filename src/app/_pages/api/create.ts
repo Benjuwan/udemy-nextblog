@@ -1,4 +1,5 @@
 /* SupaBase のテーブルから個別記事を【投稿（insert）】するためのAPI */
+/* ---------------- Next12 までの書き方（Next13でも使用可）---------------- */
 
 import { supabase } from "@/utils/supabaseClient";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -27,7 +28,6 @@ export default async function handler(
         return res.status(500).json({ error: error.message }); // エラー時は 500 番を返す
     }
 
-    // console.log(data, res.status(200).json(data)); // null undefined 
-    return res.status(200).json(data); // 問題ない場合は 200 番に、そして data を返す
+    return res.status(201).json(data); // 問題ない場合は 201（リソースのソース作成の成功は201）番に、そして data を返す
 
 };

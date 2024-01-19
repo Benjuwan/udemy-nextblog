@@ -1,4 +1,4 @@
-import { articleType } from "./types";
+import { articleType } from "../../types";
 import { notFound } from "next/navigation"; // 404 ページへのリダイレクト
 
 /* 記事一覧取得：配列で返すので articleType[] と指定（各データ要素としてなら articleType と指定で ok）*/
