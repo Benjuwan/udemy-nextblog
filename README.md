@@ -39,17 +39,18 @@ npx create-next-app@latest
     参考記事：[Next.js 13 Template と Layout の使い分け](https://zenn.dev/cybozu_frontend/articles/8caf1decb1e82c)
 
 - `app/page.tsx`と`use client`クライアントコンポーネントの`export`について<br />
-`export default コンポーネント名;`で行う。<br />※ `app/page.tsx`についてはデフォルト（ファイル制作時）のままにしておくのが無難。
+`export default コンポーネント名;`で行う。<br />※ `app/page.tsx`についてはデフォルト（ファイル制作時）のままにしておくのが無難。<br />
+各種コンポーネント名においても**build 時にエラーが出るので命名規則はパスカルケースを守る**こと。
 
 ```
-/* 任意のコンポーネント名を付けてもok（パスカルケースが無難）*/
+/* 任意のコンポーネント名を付けてもok（しかし build 時にエラーが出るので命名規則はパスカルケースを守ること）*/
 const HogePage = () => {
     return (
         <> // 何らかの処理 </>
     );
 }
 
-export default HogePage;
+export default HogePage; // パスカルケース
 ```
 
 `export default コンポーネント名;`で行わないとエラーとなる（`Next.js`に怒られる）
@@ -115,6 +116,36 @@ DB内の各種データ（オブジェクト）のidプロパティから各個�
 - **Next13 以降の**APIの作成方法（`app/api`）<br />
 `app/api`に`route.ts`を用意して`API`作成を行う（※`Next13`では以前までの`index.ts`ではなく`route.ts`に変更されたので注意）。
 任意のエンドポイント名を挟みたい場合は`api/[任意のエンドポイント名]`に`route.ts`を用意する。
+
+
+- `.next ディレクトリ`<br />
+    - `Chat-GPT`の回答<br />
+    > `.next ディレクトリ`は、`Next.js`でビルドされたアプリケーションの成果物が格納される場所です。このディレクトリ内には多くのフォルダやファイルがありますが、すべてがデプロイに必要なものではありません。一部のファイルやフォルダについて説明します。
+
+    > `cache` フォルダ：このフォルダにはビルドプロセスのキャッシュが含まれています。これにより、再ビルド時に前回のビルド結果を再利用して高速なビルドが可能となります。デプロイには必要ありませんが、開発中のビルドパフォーマンスに影響を与えます。
+
+    > `server` フォルダ：サーバーサイドのコード（APIルートなど）がここに格納されます。デプロイ先がサーバーサイドレンダリングをサポートしている場合に必要です。
+
+    > `static` フォルダ：このフォルダには静的ファイルが格納されます。この中のファイルは、サーバーサイドで処理されず、そのままクライアントに提供されます。デプロイ時にはこれらの静的ファイルが含まれることがあります。
+
+    > `pages` フォルダ：`Next.js`では、`pages`フォルダに配置されたファイルが自動的にルーティングされます。ビルド後には、このディレクトリ内の各ファイルに対応するルートが生成されます。
+
+    > `chunks` フォルダ：コード分割（Code Splitting）によって生成された JavaScript チャンクが格納されます。これにより、ページのロード時に必要なコードのみをダウンロードできます。
+
+    > ... その他：その他にも多くのファイルやフォルダが存在しますが、これらは主にビルドプロセスや特定の機能（モジュール、画像、CSSなど）に関連しています。デプロイ先が提供するサービスやプラットフォームによって、必要なファイルや構成が異なります。
+
+    > デプロイする際には、通常は `.next ディレクトリ`全体をアップロードすることはせず、必要なファイルやディレクトリだけを選択してデプロイします。各デプロイ先のドキュメントを確認し、必要なものだけをデプロイするようにしましょう。
+
+- デプロイについて<br />
+- [Deploying](https://nextjs.org/docs/app/building-your-application/deploying)
+
+- [static-html-export](https://nextjs.org/docs/app/building-your-application/deploying#static-html-export)
+
+    - [Static Exports](https://nextjs.org/docs/app/building-your-application/deploying/static-exports)
+
+- [Vercelにデプロイしてみよう | サバイバルTypeScript](https://typescriptbook.jp/tutorials/vercel-deploy)
+
+- [【Next.js】デプロイから考えるCSR,SSG,SSR](https://qiita.com/hinako_n/items/78abf815c73e834fb925)
 
 
 ### SupaBase
