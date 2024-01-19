@@ -1,11 +1,11 @@
 /* SupaBase のテーブルから全記事を取得するためのAPI */
+/* ---------------- Next12 までの書き方（Next13でも使用可）---------------- */
 
 import { supabase } from "@/utils/supabaseClient";
 import { NextApiRequest, NextApiResponse } from "next";
 
 /* https://nextjs-ja-translation-docs.vercel.app/docs/api-routes/introduction */
 
-/* 今回は非同期処理（async / await）の関数にする */
 export default async function handler(
     _req: NextApiRequest,
     res: NextApiResponse

@@ -28,7 +28,8 @@ export const UpdateBtn: FC<updateBtnPropsType> = (
         const content: string = updateContent;
 
         const API_URL = process.env.NEXT_PUBLIC_SUPABASE_API_URL;
-        await fetch(`${API_URL}/api/${articleId}`, {
+        /* エンドポイント：app/api/article */
+        await fetch(`${API_URL}/api/article/${articleId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

@@ -109,12 +109,19 @@ export default ArticleDetails;
 `{ params }: { params: { id: string } }`<br />
 DB内の各種データ（オブジェクト）のidプロパティから各個別ページのURLを取得
 
-- APIの作成（`pages/api`）<br />
-`pages/api`に`index.ts`を用意して`API`作成を行う
+- **Next12 までの（Next13 以降でも使える）**APIの作成方法（`pages/api`）<br />
+`pages/api`に`index.ts`を用意して`API`作成を行う。
+
+- **Next13 以降の**APIの作成方法（`app/api`）<br />
+`app/api`に`route.ts`を用意して`API`作成を行う（※`Next13`では以前までの`index.ts`ではなく`route.ts`に変更されたので注意）。
+任意のエンドポイント名を挟みたい場合は`api/[任意のエンドポイント名]`に`route.ts`を用意する。
 
 
 ### SupaBase
 [そもそも`supabase`ってなんぞや？](https://qiita.com/kaho_eng/items/8a7faf77222a599fb31c#%E3%81%9D%E3%82%82%E3%81%9D%E3%82%82supabase%E3%81%A3%E3%81%A6%E3%81%AA%E3%82%93%E3%81%9E%E3%82%84)
+
+- `JavaScript`で使う場合<br />
+`npm install @supabase/supabase-js`で`SupaBase`をインストールしておく。
 
 - `SupaBase`のアクセスに必要な情報は`.env.local`及び`.env`ファイルに記載
 
@@ -223,6 +230,7 @@ const nextConfig = {
     // images: {
     //     'domains': ['source.unsplash.com']
     // }
+    
     images: {
         'remotePatterns': [
             {
@@ -237,7 +245,7 @@ module.exports = nextConfig
 ```
 
 - lorem{数字}<br />
-`Next.js`ではコンポーネント内で`lorem30`と記述し`Tab`キーを押すと、指定した数値分のワード数（先ほどの例では30単語・ワード）でダミーテキストを生成してくれる。
+`Next.js` / `React`ではコンポーネント内で`lorem30`と記述し`Tab`キーを押すと、指定した数値分のワード数（先ほどの例では30単語・ワード）でダミーテキストを生成してくれる。
 
 - シリアライズ：文字列化すること
 

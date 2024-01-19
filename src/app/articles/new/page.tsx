@@ -1,7 +1,7 @@
 "use client" // submit イベントの使用はクライアントコンポーネントでしか不可能
 
 import { useFetchPost } from "@/app/hooks/useFetchIPost";
-import { createArticle } from "@/blogApis";
+import { createArticle } from "@/app/hooks/blogApis";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 
@@ -39,8 +39,9 @@ const createBlogPage = () => {
 
         const API_URL = process.env.NEXT_PUBLIC_SUPABASE_API_URL;
         // pages/api/create.ts なのでエンドポイントは create
-        await fetch(`${API_URL}/api/create`, {
-            method: "POST", // create なので POST
+        // app/api/article なのでエンドポイントは article
+        await fetch(`${API_URL}/api/article`, {
+            method: "POST",
             headers: {
                 "Content-Type": "application/json", // json 形式で扱うことを明記
             },

@@ -1,4 +1,5 @@
 /* SupaBase のテーブルから個別記事を【取得, 削除, 更新】するためのAPI */
+/* ---------------- Next12 までの書き方（Next13でも使用可）---------------- */
 
 import { supabase } from "@/utils/supabaseClient";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -30,14 +31,14 @@ export default async function handler(
             .single();
 
         if (error) {
-            return res.status(500).json({ error: error.message }); // エラー時は 500 番を返す
+            return res.status(500).json({ error: error.message }); // エラー時は 500 番を返す（※失敗時のレスポンス生成であり、実際の処理の流れには影響を与えない）
         }
 
         if (!data) {
             notFound(); // next/navigation：data が無い場合は 404 ページへ飛ばす
         }
 
-        return res.status(200).json(data); // 問題ない場合は 200 番に、そして data を返す
+        return res.status(200).json(data); // 問題ない場合は 200 番に、そして json形式で（dataを）返す（※成功時のレスポンス生成であり、実際の処理の流れには影響を与えない）
     }
 
     /* 個別記事の削除 */
@@ -68,14 +69,13 @@ export default async function handler(
             .update([{ title, content, createdAt: new Date().toISOString() }]).eq('id', id); // 個別記事のURLに基づいて処理を行う
 
         if (putError) {
-            return res.status(500).json({ error: putError.message }); // エラー時は 500 番を返す
+            return res.status(500).json({ error: putError.message });
         }
 
-        return res.status(200).json(putData); // 問題ない場合は 200 番に、そして data を返す
+        return res.status(200).json(putData);
     }
 
     else {
         throw new Error('page/api/[id].ts ERROR.');
     }
-    
 };

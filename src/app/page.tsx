@@ -1,5 +1,5 @@
 import { ArticleList } from './components/ArticleList'
-import { getAllArticles } from '@/blogApis'
+import { getAllArticles } from '@/app/hooks/blogApis'
 import { useFetchPost } from './hooks/useFetchIPost'
 import { articleType } from '@/types';
 
@@ -12,8 +12,8 @@ export default async function Home() {
   // console.log(articles);
   
   const API_URL = process.env.NEXT_PUBLIC_SUPABASE_API_URL;
-  /* フェッチするエンドポイントは http://localhost:3000/api という形になる（ディレクトリ構造が pages/api のため）*/
-  const res = await fetch(`${API_URL}/api`, { cache: "no-store" }); // SSR
+  /* フェッチするエンドポイントは http://localhost:3000/api という形になる（ディレクトリ構造が {pages/api} app/api/articles のため）*/
+  const res = await fetch(`${API_URL}/api/article`, { cache: "no-store" }); // SSR
   const articles:articleType[] = await res.json();
   // console.log(articles);
 
