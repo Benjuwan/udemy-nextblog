@@ -1,26 +1,26 @@
 "use client" // submit イベントの使用はクライアントコンポーネントでしか不可能
 
-import { useFetchPost } from "@/app/hooks/useFetchIPost";
+// import { useFetchPost } from "@/app/hooks/useFetchIPost";
 import { createArticle } from "@/app/hooks/blogApis";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 
-/* 任意のコンポーネント名を付けてもok */
-const createBlogPage = () => {
+/* 任意のコンポーネント名を付けてもokだが、命名規則はパスカルケースを守ること */
+const CreateBlogPage = () => {
     /*（カスタム）フック系統の処理は クライアントコンポーネント（ファイル先頭に use client 記述）でしか不可能 */
-    const { fetchPost } = useFetchPost();
-    useEffect(() => {
-        const post = fetchPost("https://jsonplaceholder.typicode.com/posts");
-        console.log(post);
+    // const { fetchPost } = useFetchPost();
+    // useEffect(() => {
+    //     const post = fetchPost("https://jsonplaceholder.typicode.com/posts");
+    //     console.log(post);
 
-        /* fetch 不可能 */
-        // const fetchArticleData_test = async () => {
-        //     const res = await fetch(`http://localhost:3001/src/data/posts.json`, { cache: "no-store" });
-        //     const articleData = await res.json();
-        //     console.log(articleData);
-        // }
-        // fetchArticleData_test();
-    }, []);
+    //     /* fetch 不可能 */
+    //     // const fetchArticleData_test = async () => {
+    //     //     const res = await fetch(`http://localhost:3001/src/data/posts.json`, { cache: "no-store" });
+    //     //     const articleData = await res.json();
+    //     //     console.log(articleData);
+    //     // }
+    //     // fetchArticleData_test();
+    // }, []);
 
     const router = useRouter(); // リダイレクト処理
     const [loading, setLoading] = useState<boolean>(false);
@@ -84,4 +84,4 @@ const createBlogPage = () => {
     );
 }
 
-export default createBlogPage;
+export default CreateBlogPage;
