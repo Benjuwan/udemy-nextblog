@@ -1,7 +1,8 @@
 "use client"
 
 import Image from "next/image";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
+import parse from "html-react-parser" // npm i html-react-parser
 import { articleType } from "@/types";
 import { UpdateBtn } from "@/app/components/UpdateBtn";
 
@@ -10,6 +11,12 @@ export const PageItem = ({ article }: { article: articleType }) => {
     const changeEditMode: () => void = () => setEdit(!edit);
     const [title, setTitle] = useState<string>(''); // タイトル
     const [content, setContent] = useState<string>(''); // 本文
+    const [contentParse, setContentParse] = useState<string>(''); // パース用本文
+
+    useEffect(() => {
+        const contentTxt = article.content.replaceAll('\n', '<br />'); // 改行を<br />に変換
+        setContentParse((_prevContentParse) => contentTxt);
+    }, [edit]);
 
     return (
         <>
@@ -31,7 +38,7 @@ export const PageItem = ({ article }: { article: articleType }) => {
                 <>
                     <h1 className="text-4xl text-center mb-10 mt-10">{article.title}</h1>
                     <div className="text-lg leading-relaxed text-justify mb-10">
-                        <p>{article.content}</p>
+                        <p>{parse(contentParse)}</p>
                     </div>
                 </>
 
