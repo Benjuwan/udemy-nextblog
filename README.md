@@ -28,6 +28,8 @@
 npx create-next-app@latest
 ```
 
+- サーバーコンポーネントでは`[styled-components](https://styled-components.com/)`は使用できない（クライアントコンポーネントでしか使用不可）
+
 - ファイル構成（`src`ディレクトリ配下）
     - `app`ディレクトリ（配下）は原則サーバー側でレンダリングされる（サーバー側でデータ取得を行うほうがパフォーマンス的に早いため）。デフォルトでは`use server`状態。<br />
     ファイルの先頭に`use client`を記述するとクライアントコンポーネントとなる（クライアントコンポーネントでしか`State`, `Effect`などの`Hooks`が扱えない）。
@@ -35,6 +37,17 @@ npx create-next-app@latest
     - `app/page.tsx`<br />`Next 12`でいうところの`index.tsx`の役割。各ディレクトリごとに用意することで**ファイルベースルーティング**の恩恵を得られる。
 
     - `app/layout.tsx`<br />`Next 12`でいうところの`_documet.tsx`や`_app.tsx`の役割。`Next 13`で新たに設けられたファイルで、各ページ（ディレクトリごとの`page.tsx`）の**レイアウト情報（`meta`情報など）の管理**を担う。`layout.tsx`は入れ子も可能。
+        - `meta`情報の設定例（`src/app/layout.tsx`）
+        ```
+        export const metadata: Metadata = {
+            title: 'Udemy Next 13 Blog',
+            description: 'Udemy Next 13 Blog Course',
+            robots: {
+                index: false, // noindex
+                follow: false // nofollow
+            },
+        }
+        ```
 
     参考記事：[Next.js 13 Template と Layout の使い分け](https://zenn.dev/cybozu_frontend/articles/8caf1decb1e82c)
 
