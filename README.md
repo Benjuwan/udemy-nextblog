@@ -147,6 +147,8 @@ DB内の各種データ（オブジェクト）のidプロパティから各個�
 
 - [【Next.js】デプロイから考えるCSR,SSG,SSR](https://qiita.com/hinako_n/items/78abf815c73e834fb925)
 
+- [環境変数を使ったサイトの Next / Vercel デプロイ](https://yoheiko.com/blog/vercel%E3%81%ABnext-js%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92%E3%83%87%E3%83%97%E3%83%AD%E3%82%A4%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95/)
+
 
 ### SupaBase
 [そもそも`supabase`ってなんぞや？](https://qiita.com/kaho_eng/items/8a7faf77222a599fb31c#%E3%81%9D%E3%82%82%E3%81%9D%E3%82%82supabase%E3%81%A3%E3%81%A6%E3%81%AA%E3%82%93%E3%81%9E%E3%82%84)
