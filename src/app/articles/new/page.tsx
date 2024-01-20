@@ -4,6 +4,7 @@ import { useFetchPost } from "@/app/hooks/useFetchIPost";
 import { createArticle } from "@/app/hooks/blogApis";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
+import styled from "styled-components"; // クライアントコンポーネントでしか使用できない
 
 /* 任意のコンポーネント名を付けてもokだが、命名規則はパスカルケースを守ること */
 const CreateBlogPage = () => {
@@ -59,15 +60,15 @@ const CreateBlogPage = () => {
             <h2 className="text-2xl font-bold mb-4">ブログ新規作成</h2>
             <form className="bg-slate-200 p-6 rounded shadow-lg" onSubmit={handleSubmit}>
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">URL<input value={id} onInput={(inputElm: ChangeEvent<HTMLInputElement>) => setId((_prevInputElmVal) => inputElm.target.value)} type="text" className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" /></label>
+                    <label className="block text-gray-700 text-sm font-bold mb-2"><FormElmLable>URL</FormElmLable><input value={id} onInput={(inputElm: ChangeEvent<HTMLInputElement>) => setId((_prevInputElmVal) => inputElm.target.value)} type="text" className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" /></label>
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">タイトル<input value={title} onInput={(inputElm: ChangeEvent<HTMLInputElement>) => setTitle((_prevInputElmVal) => inputElm.target.value)} type="text" className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" /></label>
+                    <label className="block text-gray-700 text-sm font-bold mb-2"><FormElmLable>タイトル</FormElmLable><input value={title} onInput={(inputElm: ChangeEvent<HTMLInputElement>) => setTitle((_prevInputElmVal) => inputElm.target.value)} type="text" className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" /></label>
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">本文<textarea value={content} onInput={(textAreaElm: ChangeEvent<HTMLTextAreaElement>) => setContent((_prevTextAreaElmVal) => textAreaElm.target.value)} className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" cols={30} rows={10}></textarea></label>
+                    <label className="block text-gray-700 text-sm font-bold mb-2"><FormElmLable>本文</FormElmLable><textarea value={content} onInput={(textAreaElm: ChangeEvent<HTMLTextAreaElement>) => setContent((_prevTextAreaElmVal) => textAreaElm.target.value)} className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" cols={30} rows={10}></textarea></label>
                 </div>
 
                 <button
@@ -85,3 +86,13 @@ const CreateBlogPage = () => {
 }
 
 export default CreateBlogPage;
+
+const FormElmLable = styled.p`
+    background-color: #1bb71b;
+    border-left: 4px solid #0d5e0d;
+    color: #fff;
+    border-radius: 0 4px 4px 0;
+    width: fit-content;
+    padding: .25em .5em;
+    margin-bottom: .5em;
+`

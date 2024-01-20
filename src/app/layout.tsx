@@ -15,6 +15,10 @@ const inter = Inter({ subsets: ['latin'] }) // デフォルトフォント
 export const metadata: Metadata = {
   title: 'Udemy Next 13 Blog',
   description: 'Udemy Next 13 Blog Course',
+  robots: {
+    index: false, // noindex
+    follow: false // nofollow
+  },
 }
 
 export default function RootLayout({
