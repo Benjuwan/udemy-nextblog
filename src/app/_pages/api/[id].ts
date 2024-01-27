@@ -1,6 +1,11 @@
 /* SupaBase のテーブルから個別記事を【取得, 削除, 更新】するためのAPI */
 /* ---------------- Next12 までの書き方（Next13でも使用可）---------------- */
 
+/**
+ * Next12 までの書き方
+ * https://nextjs-ja-translation-docs.vercel.app/docs/api-routes/introduction
+*/
+
 import { supabase } from "@/utils/supabaseClient";
 import { NextApiRequest, NextApiResponse } from "next";
 import { notFound } from "next/navigation";

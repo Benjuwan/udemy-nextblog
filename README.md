@@ -29,10 +29,16 @@ npx create-next-app@latest
 ```
 
 - サーバーコンポーネントでは`[styled-components](https://styled-components.com/)`は使用できない（クライアントコンポーネントでしか使用不可）
+    - [`Next.js`におけるスタイリングについて](https://nextjs.org/docs/app/building-your-application/styling)
+        - [CSS-in-JS](https://nextjs.org/docs/app/building-your-application/styling/css-in-js)
+        > Warning: CSS-in-JS libraries which require runtime JavaScript are not currently supported in Server Components.
 
 - ファイル構成（`src`ディレクトリ配下）
-    - `app`ディレクトリ（配下）は原則サーバー側でレンダリングされる（サーバー側でデータ取得を行うほうがパフォーマンス的に早いため）。デフォルトでは`use server`状態。<br />
+    - `app`ディレクトリ（配下）は**原則サーバー側でレンダリング**される（サーバー側でデータ取得を行うほうがパフォーマンス的に早いため）。デフォルトでは`use server`（サーバーコンポーネントの）状態。<br />
     ファイルの先頭に`use client`を記述するとクライアントコンポーネントとなる（クライアントコンポーネントでしか`State`, `Effect`などの`Hooks`が扱えない）。
+    
+    - `use client`（クライアントコンポーネント）は**苗字**みたいなもので、親で宣言していればそのディレクティブ（配下の子コンポーネント）も全てクライアントコンポーネントになる（各自子コンポーネントで`use client`を宣言するとエラーになるので注意）<br />
+    参照記事：[【Next.js】RSCとクライアントコンポーネントを改めて理解する](https://zenn.dev/sc30gsw/articles/0941e76ae96260#%E5%A2%83%E7%95%8C%E5%86%85%E3%81%A7%E3%81%AFuse-client%E3%81%AF%E4%B8%80%E5%BA%A6%E3%81%AE%E5%AE%A3%E8%A8%80%E3%81%AB%E3%81%99%E3%81%B9%E3%81%97)
 
     - `app/page.tsx`<br />`Next 12`でいうところの`index.tsx`の役割。各ディレクトリごとに用意することで**ファイルベースルーティング**の恩恵を得られる。
 
@@ -127,7 +133,7 @@ DB内の各種データ（オブジェクト）のidプロパティから各個�
 `pages/api`に`index.ts`を用意して`API`作成を行う。
 
 - **Next13 以降の**APIの作成方法（`app/api`）<br />
-`app/api`に`route.ts`を用意して`API`作成を行う（※`Next13`では以前までの`index.ts`ではなく`route.ts`に変更されたので注意）。
+`app/api`に`route.ts`を用意して`API`作成を行う（※`Next13`では以前までの`index.ts`ではなく`route.ts`に変更されたので注意）。<br />
 任意のエンドポイント名を挟みたい場合は`api/[任意のエンドポイント名]`に`route.ts`を用意する。
 
 
@@ -199,6 +205,11 @@ fetch(`${API_URL}/api/create`, {
 - 動的関数ファイル（[id].ts）で Atom（というかライブラリ？）は使えない<br />
 使用しようとすると`PUT`や`DELETE`処理でサーバー接続エラー（500）が発生してしまう。
 
+- APIを介さないリクエストにおいては`fetch`は使用不可<br />
+> Next.jsアプリケーションから直接DBにリクエストする、つまりAPIを介さないリクエストにおいては、fetchを使用することができません。
+
+参照記事：[Next.js App Router キャッシュの今](https://zenn.dev/frontendflat/articles/nextjs-cache-2024#unstable_cache)
+
 
 ### メモ
 - サーバーコンポーネントでの`console.log('ログ出力')`は、ターミナルに表示される
@@ -218,9 +229,6 @@ npx -v // npx の ver 確認
 npm install -g yarn // おまけ：yarn のインストール方法
 yarn -v
 ```
-
-- `VS Code`の拡張機能<br />
-    - [ES7+ React/Redux/React-Native snippets](https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets)
 
 - 適当な画像の取得方法<br />
 [Unsplash Sourceを使ってみよう！](https://bagelee.com/design/about-unsplash-source/)

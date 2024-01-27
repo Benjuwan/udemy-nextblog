@@ -35,6 +35,8 @@ export async function GET(
     }
 };
 
+
+
 /* 削除 */
 export async function DELETE(
     req: Request,
@@ -54,6 +56,7 @@ export async function DELETE(
     return NextResponse.json({ message: '削除成功' })
 
 };
+
 
 
 /* 更新 */

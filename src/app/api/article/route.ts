@@ -3,23 +3,21 @@
 import { supabase } from "@/utils/supabaseClient";
 import { NextResponse } from "next/server";
 
-/* https://nextjs-ja-translation-docs.vercel.app/docs/api-routes/introduction */
+/* 【Next12】注釈付きのコメントアウト部分は pages（Next12まで）の書き方 */
+// 【Next12】 export default async function handler(
 
-/* コメントアウト部分は pages（Next12まで）の書き方 */
-// export default async function handler(
-    
-export async function GET( // Next13以降では function [GET] 部分は、投稿ならPOST、更新ならPUT、削除ならDELETE を指定
-    _req: Request, // _req: NextApiRequest
-    _res: Response // res は、res: NextApiResponse でもok
+export async function GET( // 【Next12】Next13以降では function [GET] 部分は、投稿ならPOST、更新ならPUT、削除ならDELETE を指定
+    _req: Request, // 【Next12】 _req: NextApiRequest
+    _res: Response // 【Next12】 res は、res: NextApiResponse でもok
 ) {
     const { data, error } = await supabase.from('benjuwan-next13-udemy-posts').select('*');
 
     if (error) {
-        // return res.status(500).json({ error: error.message });
+        // 【Next12】 return res.status(500).json({ error: error.message });
         return NextResponse.json(error)
     }
 
-    // return res.status(200).json(data);
+    // 【Next12】 return res.status(200).json(data);
     return NextResponse.json(data, { status: 200 })
 
 };
@@ -30,7 +28,7 @@ export async function POST(
     req: Request,
     _res: Response
 ) {
-    // const { id, title, content } = req.body; // Next13 では body で取得できない
+    // 【Next12】 const { id, title, content } = req.body; // Next13 では body で取得できない
     const { id, title, content } = await req.json();
 
     const { data, error } = await supabase
