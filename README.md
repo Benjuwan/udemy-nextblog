@@ -1,17 +1,7 @@
 # Udemy-NextBlog
  [【Next.js13】最新バージョンのNext.js13をマイクロブログ構築しながら基礎と本質を学ぶ講座](https://www.udemy.com/course/nextjs13_learning_with_microblog/)<br />
 
-※本`README.md`に記載されている一部は、カリキュラム終了後に自身で制作した`Next`プロジェクトを通じて得た情報も含まれている。
-
- - セクション5までの進行時における立ち上げ時の注意
-    - ターミナル1：`npx json-server src/data/posts.json --port 3001`
-    - ターミナル2：`npm run dev`という立ち上げフロー
-
-ターミナル1で json-server を立ち上げてからでないとエラーが出るので注意。
-
-
-## Next 14
-現在（2023/12）の最新 ver は`Next 14`なので14で進めていく
+※本`README`に記載されている一部は、カリキュラム終了後に筆者が制作した`Next`プロジェクトを通じて得た情報も含まれています。
 
 
 ## 目次
@@ -32,7 +22,7 @@
 npx create-next-app@latest
 ```
 
-- サーバーコンポーネントでは`[styled-components](https://styled-components.com/)`は使用できない（**クライアントコンポーネントでしか使用不可**）
+- サーバーコンポーネントでは[`styled-components`](https://styled-components.com/)は使用できない（**クライアントコンポーネントでしか使用不可**）
     - `styled-components`は`next.config.js`に所定の記述が必要（無いと`CSS`がうまくあたらない）<br />
 
     ```js
@@ -59,7 +49,7 @@ npx create-next-app@latest
     - `use client`（クライアントコンポーネント）は**苗字**みたいなもので、親で宣言していればそのディレクティブ（配下の子コンポーネント）も全てクライアントコンポーネントになる（各自子コンポーネントで`use client`を宣言するとエラーになるので注意）<br />
     参照記事：[【Next.js】RSCとクライアントコンポーネントを改めて理解する](https://zenn.dev/sc30gsw/articles/0941e76ae96260#%E5%A2%83%E7%95%8C%E5%86%85%E3%81%A7%E3%81%AFuse-client%E3%81%AF%E4%B8%80%E5%BA%A6%E3%81%AE%E5%AE%A3%E8%A8%80%E3%81%AB%E3%81%99%E3%81%B9%E3%81%97)
 
-    - `app/page.tsx`<br />`Next 12`でいうところの`index.tsx`の役割。各ディレクトリごとに用意することで**ファイルベースルーティング**の恩恵を得られる。
+    - `app/page.tsx`<br />`Next 12`でいうところの`index.tsx`の役割。各ディレクトリごとに用意することで**ファイルシステムベースルーティング**の恩恵を得られる。
 
     - `app/layout.tsx`<br />`Next 12`でいうところの`_documet.tsx`や`_app.tsx`の役割。`Next 13`で新たに設けられたファイルで、各ページ（ディレクトリごとの`page.tsx`）の**レイアウト情報（`meta`情報など）の管理**を担う。`layout.tsx`は入れ子も可能。
         - `meta`情報の設定例（`src/app/layout.tsx`）
@@ -128,10 +118,10 @@ export default HogePage; // パスカルケース
 - `not-found` / `loading` ページも**ファイル名固定（`not-found.tsx` / `loading.tsx`）は同様**だが、これらは各ディレクトリごとに配置できる。
 
 - `Next`の方針に沿って**極力サーバーコンポーネントで扱いたい**<br />
-処理（`click`, `submit`など各種イベントハンドラーの使用はクライアントコンポーネントでしか不可能）によってクライアントコンポーネントにしなくてはならない場合はコンポーネントを別途作成する（親：サーバーcom、子：クライアントcom）<br />
+処理（`click`, `submit`など各種イベントハンドラーの使用はクライアントコンポーネントでしか不可能）によってクライアントコンポーネントにしなくてはならない場合はコンポーネントを別途作成する（親：サーバーコンポーネント、子：クライアントコンポーネント）<br />
 ただし、行いたい処理によっては`サーバー側`の処理と`クライアント側`の処理が競合して無限ループ的なエラーが生じる可能性もあるので、そういったケースを考慮する意味でもコンポーネント分けは大切。
 
-- ファイルベースルーティング（詳細ページ）<br />
+- ファイルシステムベースルーティング<br />
 `archives/[id]`（一覧dir / 個別詳細dir）という形になり、個別詳細dir内に設けた`page.tsx`でコンポーネントの引数に`props`としてデータを受けることで各種URLを取得できる。
 
 ```ts
@@ -157,7 +147,7 @@ DB内の各種データ（オブジェクト）のidプロパティから各個�
 任意のエンドポイント名を挟みたい場合は`api/[任意のエンドポイント名]`に`route.ts`を用意する。
 
 
-- `.next ディレクトリ`<br />
+- `.next ディレクトリ`（Macの場合は不可視ファイルとして扱われる）<br />
     - `Chat-GPT`の回答<br />
     > `.next ディレクトリ`は、`Next.js`でビルドされたアプリケーションの成果物が格納される場所です。このディレクトリ内には多くのフォルダやファイルがありますが、すべてがデプロイに必要なものではありません。一部のファイルやフォルダについて説明します。
 
@@ -194,7 +184,7 @@ DB内の各種データ（オブジェクト）のidプロパティから各個�
 - `SSG`に際して必要な記述<br />
     `output: 'export'`を追記
 
-    ```mjs
+    ```js
     /** @type {import('next').NextConfig} */
     const nextConfig = {
         output: 'export',
@@ -207,14 +197,14 @@ DB内の各種データ（オブジェクト）のidプロパティから各個�
 
 - 外部（ドメイン）サイトから（画像などの素材）データを引っ張ってくる場合に必要な記述<br />
 
-    ```mjs
+    ```js
     /** @type {import('next').NextConfig} */
     const nextConfig = {
         images: {
             remotePatterns: [
             {
                 protocol: 'https',
-                hostname: 'subdomain.hoge.jp' // ドメイン
+                hostname: 'domain.co.jp' // ドメイン
             },
             ],
         },
@@ -227,7 +217,7 @@ DB内の各種データ（オブジェクト）のidプロパティから各個�
 
 - サブディレクトリの指定<br />
 
-    ```mjs
+    ```js
     /** @type {import('next').NextConfig} */
     const nextConfig = {
         assetPrefix:  'サブディレクトリ',
@@ -243,9 +233,9 @@ DB内の各種データ（オブジェクト）のidプロパティから各個�
     [Next.jsで静的ビルドしたソースコードをサブディレクトリパスにデプロイする方法](https://zenn.dev/chot/articles/99ae6acca1429b)
 
 - ビルド時の出力先フォルダの設定<br />
-    ※静的エクスポートしない場合のデフォルトは（Macの場合は不可視ファイルの）`.next`フォルダに出力される。
+    ※静的エクスポートしない場合のデフォルトは`.next`フォルダに出力される。
 
-    ```mjs
+    ```js
     /** @type {import('next').NextConfig} */
     const nextConfig = {
         distDir: 'out', // 出力先を'out'フォルダに設定
@@ -255,9 +245,9 @@ DB内の各種データ（オブジェクト）のidプロパティから各個�
     ```
 
 - 静的エクスポート時のサブページの直リンク対策<br />
-    ※`trailingSlash: true`を設定しない場合、`Link`の`href`属性や`router.push()`の引数に指定した **文字列の静的ファイルが生成される（例：`about.html`）** ため、サブページを再読み込みまたは直リンクしようとすると`about/index.html`は存在しないので意図した挙動にならない（TOPページへ飛ばされる）
+    ※`trailingSlash: true`を設定しない場合、`Link`の`href`属性や`router.push()`の引数に指定した **文字列の静的ファイルが生成される（例：`about.html`）** ため、サブページを再読み込みまたは直リンクしようとすると`about/index.html`は存在しないので意図した挙動にならない（ホスティング先の設定によって404リダイレクトまたはTOPページへリダイレクトされたりする）
 
-    ```mjs
+    ```js
     /** @type {import('next').NextConfig} */
     const nextConfig = {
         trailingSlash: true,
@@ -273,7 +263,7 @@ DB内の各種データ（オブジェクト）のidプロパティから各個�
 - 静的エクスポートしたページの画像（`jpg`など）が表示されない<br />
     ※ `images: { unoptimized: true, }`することで解決。
 
-    ```mjs
+    ```js
     /** @type {import('next').NextConfig} */
     const nextConfig = {
         images: {
@@ -313,6 +303,7 @@ type hogeType = {
     urlPathName: string;
 }
 
+/* コンポーネントの命名記述 */
 export default function HogeComponent({ props }: { props: hogeType }) {
     // ...コンポーネントの中身
 }
@@ -325,6 +316,7 @@ type hogeType = {
     urlPathName: string;
 }
 
+/* コンポーネントの命名記述 */
 function HogeComponent({ props }: { props: hogeType }) {
     // ...コンポーネントの中身
 }
@@ -390,17 +382,17 @@ fetch(`${API_URL}/api/create`, {
 });
 ```
 
-- 動的関数ファイル（[id].ts）で Atom（というかライブラリ？）は使えない<br />
+- 動的関数ファイル（[id].ts）で`Atom`（というかライブラリ？）は使えない<br />
 使用しようとすると`PUT`や`DELETE`処理でサーバー接続エラー（500）が発生してしまう。
-
-- APIを介さないリクエストにおいては`fetch`は使用不可<br />
-> Next.jsアプリケーションから直接DBにリクエストする、つまりAPIを介さないリクエストにおいては、fetchを使用することができません。
-
-参照記事：[Next.js App Router キャッシュの今](https://zenn.dev/frontendflat/articles/nextjs-cache-2024#unstable_cache)
 
 
 ### メモ
 - 内部データはフェッチできない（外部データ：API しかフェッチできない）。外部データでも`CSR`仕様（`useEffect`を使用した非同期のフェッチ処理など）では`CORS`でフェッチできないが、`SSR`（サーバーコンポーネントとして`fetch api`を使用）だとフェッチできる。
+
+    - APIを介さないリクエストにおいては`fetch`は使用不可<br />
+    > Next.jsアプリケーションから直接DBにリクエストする、つまりAPIを介さないリクエストにおいては、fetchを使用することができません。
+
+    参照記事：[Next.js App Router キャッシュの今](https://zenn.dev/frontendflat/articles/nextjs-cache-2024#unstable_cache)
 
 - `npm run`について<br />
     > `npm run`とは、`npm scripts`と呼ばれるタスク実行機能を呼び出すコマンドです。機能は一つしかありません。
@@ -424,7 +416,6 @@ fetch(`${API_URL}/api/create`, {
 - `CssModule`使用時の`querySelector`への要素指定方法<br />
 
     ```ts
-    // src/app/hooks/header/useNavView.ts
     import headerStyle from "../../styles/header/header.module.css";
 
     export const useNavView = () => {
@@ -454,7 +445,7 @@ fetch(`${API_URL}/api/create`, {
     - document.querySelector(`.${headerStyle.headerBtn}`)<br />
     単数指定は上記の形。
 
-    - `class`関連の記述方法
+    - `className`の指定方法
 
     ```ts
     if (headerNav?.classList.contains(headerStyle.ViewOn)) {
@@ -483,7 +474,7 @@ fetch(`${API_URL}/api/create`, {
 `useRouter`で1度閲覧したページへ遷移する際は`push`した後に`refresh`しないとキャッシュが効いた状態になる場合があるので注意
 
 - **ホスティング先によってはルーティングの設定（`.htaccess`の調整）が必要**<br />
-    例えば、以下のXサーバーの場合は当該ドメイン（FTPサーバールート）の`.htaccess`にリダイレクト処理を記述しないと存在しないページ（パス）でも通ってしまう（※大抵`index.html` = TOPページへリダイレクトさせられる）ので、別途404リダイレクト処理の設定を追記する必要がある。
+    例えば、以下のXサーバーの場合は当該ドメイン（FTPサーバールート）の`.htaccess`にリダイレクト処理を記述しないと存在しないページ（パス）でも通ってしまう（※`index.html` = TOPページへリダイレクトさせられる）ので、別途404リダイレクト処理の設定を追記する必要がある。
 
     ```
     # 全てのリクエストに対して、Ngx_Cache_NoCacheModeをoffに設定し、Ngx_Cache_StaticModeを設定します。
@@ -582,7 +573,7 @@ yarn -v
 
 - ユーティリティファースト：予め用意された`CSS`クラスを`HTML`に当てるだけでスタイルを適用させていく手法
 
-- `git`操作中に特定のターミナル画面から移動できなくなった場合の対応<br />
+- `git`操作中に**特定のターミナル画面から移動できなくなった場合**の対応<br />
     - `esc`キーを押した後に`:q!` or `:wq`を入力して`Enter`キーを押すと抜け出せる。
         - 今まで記述した内容（変更）を**保存しない**場合は`:q!`
         - 今まで記述した内容（変更）を**保存したい**場合は`:wq`
