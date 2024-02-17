@@ -1,5 +1,7 @@
 # Udemy-NextBlog
- [【Next.js13】最新バージョンのNext.js13をマイクロブログ構築しながら基礎と本質を学ぶ講座](https://www.udemy.com/course/nextjs13_learning_with_microblog/)
+ [【Next.js13】最新バージョンのNext.js13をマイクロブログ構築しながら基礎と本質を学ぶ講座](https://www.udemy.com/course/nextjs13_learning_with_microblog/)<br />
+
+※本`README.md`に記載されている一部は、カリキュラム終了後に自身で制作した`Next`プロジェクトを通じて得た情報も含まれている。
 
  - セクション5までの進行時における立ち上げ時の注意
     - ターミナル1：`npx json-server src/data/posts.json --port 3001`
@@ -18,7 +20,6 @@
 [ESLint](#eslint)<br />
 [SupaBase](#supabase)<br />
 [メモ](#メモ)<br />
-[備忘録・所感](#備忘録・所感)<br />
 
 
 ### Next.js
@@ -148,10 +149,10 @@ export default ArticleDetails;
 `{ params }: { params: { id: string } }`<br />
 DB内の各種データ（オブジェクト）のidプロパティから各個別ページのURLを取得
 
-- **Next12 までの（Next13 以降でも使える）**APIの作成方法（`pages/api`）<br />
+- **Next12 までの（Next13 以降でも使える）** APIの作成方法（`pages/api`）<br />
 `pages/api`に`index.ts`を用意して`API`作成を行う。
 
-- **Next13 以降の**APIの作成方法（`app/api`）<br />
+- **Next13 以降の** APIの作成方法（`app/api`）<br />
 `app/api`に`route.ts`を用意して`API`作成を行う（※`Next13`では以前までの`index.ts`ではなく`route.ts`に変更されたので注意）。<br />
 任意のエンドポイント名を挟みたい場合は`api/[任意のエンドポイント名]`に`route.ts`を用意する。
 
@@ -242,7 +243,7 @@ DB内の各種データ（オブジェクト）のidプロパティから各個�
     [Next.jsで静的ビルドしたソースコードをサブディレクトリパスにデプロイする方法](https://zenn.dev/chot/articles/99ae6acca1429b)
 
 - ビルド時の出力先フォルダの設定<br />
-    ※静的エクスポートしない場合のデフォルトは不可視ファイルの`.next`フォルダに出力される。
+    ※静的エクスポートしない場合のデフォルトは（Macの場合は不可視ファイルの）`.next`フォルダに出力される。
 
     ```mjs
     /** @type {import('next').NextConfig} */
@@ -345,7 +346,7 @@ export default memo(HogeComponent);
 + }} />
 ```
 
-型によって記述が独特になる
+型によって記述が独特になる（以下は当ファイルに存在しない架空の記述）
 
 ```js
 <ArticlesContentDetail props={{
@@ -399,6 +400,8 @@ fetch(`${API_URL}/api/create`, {
 
 
 ### メモ
+- 内部データはフェッチできない（外部データ：API しかフェッチできない）。外部データでも`CSR`仕様（`useEffect`を使用した非同期のフェッチ処理など）では`CORS`でフェッチできないが、`SSR`（サーバーコンポーネントとして`fetch api`を使用）だとフェッチできる。
+
 - `npm run`について<br />
     > `npm run`とは、`npm scripts`と呼ばれるタスク実行機能を呼び出すコマンドです。機能は一つしかありません。
     > `package.json`内に書かれたシェルスクリプトを実行するだけ。これだけです。
@@ -408,19 +411,15 @@ fetch(`${API_URL}/api/create`, {
     - `./package.json`の中身
 
     ```json
-    ...
-    ..
-    .
     "scripts": {
-        "dev": "next dev", // npm run dev = next dev
-        "build": "next build", // npm run build = next build
-        "start": "next start", // npm run start ...
-        "lint": "next lint" // ...
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
     },
-    .
-    ..
-    ...
     ```
+
+    `npm run dev = next dev`, `npm run build = next build`,...
 
 - `CssModule`使用時の`querySelector`への要素指定方法<br />
 
@@ -483,28 +482,42 @@ fetch(`${API_URL}/api/create`, {
 - `useRouter`<br />
 `useRouter`で1度閲覧したページへ遷移する際は`push`した後に`refresh`しないとキャッシュが効いた状態になる場合があるので注意
 
-- ホスティング先によってはルーティングの設定（`.htaccess`の調整）が必要<br />
-例えば、以下のXサーバーの場合は当該ドメイン（FTPサーバールート）の`.htaccess`にリダイレクト処理を記述しないと存在しないページ（パス）でも通ってしまう（※大抵`index.html` = TOPページへリダイレクトさせられる）ので、別途404リダイレクト処理の設定を追記する必要がある。
+- **ホスティング先によってはルーティングの設定（`.htaccess`の調整）が必要**<br />
+    例えば、以下のXサーバーの場合は当該ドメイン（FTPサーバールート）の`.htaccess`にリダイレクト処理を記述しないと存在しないページ（パス）でも通ってしまう（※大抵`index.html` = TOPページへリダイレクトさせられる）ので、別途404リダイレクト処理の設定を追記する必要がある。
 
-```
-# 全てのリクエストに対して、Ngx_Cache_NoCacheModeをoffに設定し、Ngx_Cache_StaticModeを設定します。
-SetEnvIf Request_URI ".*" Ngx_Cache_NoCacheMode=off
-SetEnvIf Request_URI ".*" Ngx_Cache_StaticMode
+    ```
+    # 全てのリクエストに対して、Ngx_Cache_NoCacheModeをoffに設定し、Ngx_Cache_StaticModeを設定します。
+    SetEnvIf Request_URI ".*" Ngx_Cache_NoCacheMode=off
+    SetEnvIf Request_URI ".*" Ngx_Cache_StaticMode
 
-# HTTPSがオフの場合、全てのリクエストをHTTPSにリダイレクトします。
-RewriteEngine on
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+    # HTTPSがオフの場合、全てのリクエストをHTTPSにリダイレクトします。
+    RewriteEngine on
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
-# ファイルが存在しない場合、またはディレクトリでない場合、すべてのリクエストをindex.htmlにリライトします。
-# RewriteEngine On
-# RewriteCond %{REQUEST_FILENAME} !-f
-# RewriteCond %{REQUEST_FILENAME} !-d
-# RewriteRule ^ index.html [QSA,L]
+    # ファイルが存在しない場合、またはディレクトリでない場合、すべてのリクエストをindex.htmlにリライトします。
+    # RewriteEngine On
+    # RewriteCond %{REQUEST_FILENAME} !-f
+    # RewriteCond %{REQUEST_FILENAME} !-d
+    # RewriteRule ^ index.html [QSA,L]
 
-# 404リダイレクト処理を設定（必ず相対パスで指定。サブディレクトリの場合はサブディレクトリからのパスを指定する）
-ErrorDocument 404 /subdir/hoge/404.html
-```
+    # 404リダイレクト処理を設定（必ず相対パスで指定。サブディレクトリの場合はサブディレクトリからのパスを指定する）
+    ErrorDocument 404 /subdir/hoge/404.html
+    ```
+
+    - （`Netlify`や各種ホスティング先で）開発モードでは機能するのにビルド・デプロイ後にはルーティングがうまく機能しない理由<br />
+    参考情報：[Reactで作成したSPAをNetlifyでホストする際のコツ](https://zenn.dev/sikkim/articles/bf64efa6a5ca68#netlify%E7%94%A8%E3%81%AE%E3%83%AA%E3%83%80%E3%82%A4%E3%83%AC%E3%82%AF%E3%83%88%E8%A8%AD%E5%AE%9A%E3%82%92%E8%BF%BD%E5%8A%A0)<br />
+
+    > （...中略）ルートにアクセスしたり、リンクをクリックして画面遷移する分には良いのですが、URLを指定してルート以外にアクセスすると404エラーになってしまいます。`dist`にはルートにしか`index.html`が存在しないので、考えてみたら当たり前ですね。ではなぜ`npm run dev`で動かしていたときはURLを直接指定しても正常に表示されていたかというと、ルート以外へのアクセスをテストサーバーがルートにリダイレクトしてくれていたからです。したがって`dist`のテストをするときは、すべてのアクセスをルートにリダイレクトしてやれば開発時の動きを再現できます。
+
+    > 上記の問題は`Netlify`にデプロイしたときも発生します。`Netlify`ですべてのアクセスをルートの`index.html`にリダイレクトするのは簡単で、以下の内容の`netlify.toml`をReactプロジェクトのルートに配置しておくだけです。
+
+    ```
+    [[redirects]]
+    from = "/*"
+    to = "/index.html"
+    status = 200
+    ```
 
 - サーバーコンポーネントでの`console.log('ログ出力')`は**ターミナルに表示**される
 
@@ -562,32 +575,16 @@ yarn -v
     npm run json-server
     ```
 
-
-### 備忘録・所感
-- 内部データはフェッチできない（外部データ：API しかフェッチできない）。外部データでも`CSR`仕様（`useEffect`を使用した非同期のフェッチ処理など）では`CORS`でフェッチできないが、`SSR`（サーバーコンポーネントとして`fetch api`を使用）だとフェッチできる。
-
-- `next.config.js`で特定サイトからのデータやコンテンツの取得許可を与える
-
-```js
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-    // nextConfig によって、対象サイト（今回は unsplash ）からの画像データ取得許可を与える
-    images: {
-        'remotePatterns': [
-            {
-                protocol: 'https',
-                hostname: 'source.unsplash.com'
-            }
-        ],
-    }
-}
-
-module.exports = nextConfig
-```
-
 - lorem{数字}<br />
 `Next.js` / `React`ではコンポーネント内で`lorem30`と記述し`Tab`キーを押すと、指定した数値分のワード数（先ほどの例では30単語・ワード）でダミーテキストを生成してくれる。
 
 - シリアライズ：文字列化すること
 
 - ユーティリティファースト：予め用意された`CSS`クラスを`HTML`に当てるだけでスタイルを適用させていく手法
+
+- `git`操作中に特定のターミナル画面から移動できなくなった場合の対応<br />
+    - `esc`キーを押した後に`:q!` or `:wq`を入力して`Enter`キーを押すと抜け出せる。
+        - 今まで記述した内容（変更）を**保存しない**場合は`:q!`
+        - 今まで記述した内容（変更）を**保存したい**場合は`:wq`
+
+    参照情報：[gitのある画面から抜け出せません](https://terakoya.sejuku.net/question/detail/16555)
