@@ -506,7 +506,7 @@ fetch(`${API_URL}/api/create`, {
     ```
 
     - （`Netlify`や各種ホスティング先で）開発モードでは機能するのにビルド・デプロイ後にはルーティングがうまく機能しない理由<br />
-    参考情報：[Reactで作成したSPAをNetlifyでホストする際のコツ](https://zenn.dev/sikkim/articles/bf64efa6a5ca68#netlify%E7%94%A8%E3%81%AE%E3%83%AA%E3%83%80%E3%82%A4%E3%83%AC%E3%82%AF%E3%83%88%E8%A8%AD%E5%AE%9A%E3%82%92%E8%BF%BD%E5%8A%A0)<br />
+    参考情報：[Reactで作成したSPAをNetlifyでホストする際のコツ](https://zenn.dev/sikkim/articles/bf64efa6a5ca68#netlify%E7%94%A8%E3%81%AE%E3%83%AA%E3%83%80%E3%82%A4%E3%83%AC%E3%82%AF%E3%83%88%E8%A8%AD%E5%AE%9A%E3%82%92%E8%BF%BD%E5%8A%A0)<br /><br />
 
     > （...中略）ルートにアクセスしたり、リンクをクリックして画面遷移する分には良いのですが、URLを指定してルート以外にアクセスすると404エラーになってしまいます。`dist`にはルートにしか`index.html`が存在しないので、考えてみたら当たり前ですね。ではなぜ`npm run dev`で動かしていたときはURLを直接指定しても正常に表示されていたかというと、ルート以外へのアクセスをテストサーバーがルートにリダイレクトしてくれていたからです。したがって`dist`のテストをするときは、すべてのアクセスをルートにリダイレクトしてやれば開発時の動きを再現できます。
 
@@ -555,19 +555,19 @@ yarn -v
 
     - `package.json`に追記して`npm`コマンドで使用
     
-    ```json
-    .
-    ..
-    "scripts": {
-        "dev": "next dev",
-        "build": "next build",
-        "start": "next start",
-        "lint": "next lint",
-        + "json-server": "json-server [filePath/fileName].json --port [portNumber: ex...3001]"
-    },
-    ..
-    .
-    ```
+```diff
+.
+..
+"scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
++ "json-server": "json-server [filePath/fileName].json --port [portNumber: ex...3001]"
+},
+..
+.
+```
 
     追記後に`json-server`を立ち上げる
 
