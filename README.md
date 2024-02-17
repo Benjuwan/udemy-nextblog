@@ -14,9 +14,12 @@
 
 ## 目次
 [Next.js](#nextjs)<br />
+[next.config](#nextconfig)<br />
+[ESLint](#eslint)<br />
 [SupaBase](#supabase)<br />
 [メモ](#メモ)<br />
 [備忘録・所感](#備忘録・所感)<br />
+
 
 ### Next.js
 - `Next.js`最新情報<br />[The latest Next.js news](https://nextjs.org/blog)
@@ -28,7 +31,22 @@
 npx create-next-app@latest
 ```
 
-- サーバーコンポーネントでは`[styled-components](https://styled-components.com/)`は使用できない（クライアントコンポーネントでしか使用不可）
+- サーバーコンポーネントでは`[styled-components](https://styled-components.com/)`は使用できない（**クライアントコンポーネントでしか使用不可**）
+    - `styled-components`は`next.config.js`に所定の記述が必要（無いと`CSS`がうまくあたらない）<br />
+
+    ```js
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+        compiler: {
+            styledComponents: true,
+        },
+    };
+
+    export default nextConfig;
+    ```
+
+    [公式の参照情報](https://nextjs.org/docs/app/building-your-application/styling/css-in-js#styled-components)
+
     - [`Next.js`におけるスタイリングについて](https://nextjs.org/docs/app/building-your-application/styling)
         - [CSS-in-JS](https://nextjs.org/docs/app/building-your-application/styling/css-in-js)
         > Warning: CSS-in-JS libraries which require runtime JavaScript are not currently supported in Server Components.
@@ -44,7 +62,8 @@ npx create-next-app@latest
 
     - `app/layout.tsx`<br />`Next 12`でいうところの`_documet.tsx`や`_app.tsx`の役割。`Next 13`で新たに設けられたファイルで、各ページ（ディレクトリごとの`page.tsx`）の**レイアウト情報（`meta`情報など）の管理**を担う。`layout.tsx`は入れ子も可能。
         - `meta`情報の設定例（`src/app/layout.tsx`）
-        ```
+
+        ```ts
         export const metadata: Metadata = {
             title: 'Udemy Next 13 Blog',
             description: 'Udemy Next 13 Blog Course',
@@ -61,7 +80,7 @@ npx create-next-app@latest
 `export default コンポーネント名;`で行う。<br />※ `app/page.tsx`についてはデフォルト（ファイル制作時）のままにしておくのが無難。<br />
 各種コンポーネント名においても**build 時にエラーが出るので命名規則はパスカルケースを守る**こと。
 
-```
+```jsx
 /* 任意のコンポーネント名を付けてもok（しかし build 時にエラーが出るので命名規則はパスカルケースを守ること）*/
 const HogePage = () => {
     return (
@@ -84,7 +103,7 @@ export default HogePage; // パスカルケース
 
     - `fetch API`通じて各種生成方法（`SSG`, `SSR`, `ISR`）を利用できる。
 
-    ```
+    ```js
     /* SSG */
     // This request should be cached until manually invalidated.
     // Similar to `getStaticProps` --- to Next 12.
@@ -114,7 +133,7 @@ export default HogePage; // パスカルケース
 - ファイルベースルーティング（詳細ページ）<br />
 `archives/[id]`（一覧dir / 個別詳細dir）という形になり、個別詳細dir内に設けた`page.tsx`でコンポーネントの引数に`props`としてデータを受けることで各種URLを取得できる。
 
-```
+```ts
 const ArticleDetails = ({ params }: { params: { id: string } }) => {
     return (
         <>
@@ -169,15 +188,183 @@ DB内の各種データ（オブジェクト）のidプロパティから各個�
 - [環境変数を使ったサイトの Next / Vercel デプロイ](https://yoheiko.com/blog/vercel%E3%81%ABnext-js%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92%E3%83%87%E3%83%97%E3%83%AD%E3%82%A4%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95/)
 
 
+### next.config
+`SSG`やサブディレクトリへのデプロイなどに必要な記述の備忘録。
+- `SSG`に際して必要な記述<br />
+    `output: 'export'`を追記
+
+    ```mjs
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+        output: 'export',
+    };
+
+    export default nextConfig;
+    ```
+
+    [公式の参照情報](https://nextjs.org/docs/app/building-your-application/deploying/static-exports)
+
+- 外部（ドメイン）サイトから（画像などの素材）データを引っ張ってくる場合に必要な記述<br />
+
+    ```mjs
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+        images: {
+            remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'subdomain.hoge.jp' // ドメイン
+            },
+            ],
+        },
+    };
+
+    export default nextConfig;
+    ```
+
+    [公式の参照情報](https://nextjs.org/docs/messages/next-image-unconfigured-host)
+
+- サブディレクトリの指定<br />
+
+    ```mjs
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+        assetPrefix:  'サブディレクトリ',
+        basePath:  'サブディレクトリ',
+        reactStrictMode: true, // Since Next.js 13.4, Strict Mode is true by default with app router, so the above configuration is only necessary for pages router
+    };
+
+    export default nextConfig;
+    ```
+
+    [Next.jsで静的サイトをサブディレクトリにデプロイしたいときの設定](https://qiita.com/hiropy0123/items/02ab91f69dbfa4e2797f)
+
+    [Next.jsで静的ビルドしたソースコードをサブディレクトリパスにデプロイする方法](https://zenn.dev/chot/articles/99ae6acca1429b)
+
+- ビルド時の出力先フォルダの設定<br />
+    ※静的エクスポートしない場合のデフォルトは不可視ファイルの`.next`フォルダに出力される。
+
+    ```mjs
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+        distDir: 'out', // 出力先を'out'フォルダに設定
+    };
+
+    export default nextConfig;
+    ```
+
+- 静的エクスポート時のサブページの直リンク対策<br />
+    ※`trailingSlash: true`を設定しない場合、`Link`の`href`属性や`router.push()`の引数に指定した **文字列の静的ファイルが生成される（例：`about.html`）** ため、サブページを再読み込みまたは直リンクしようとすると`about/index.html`は存在しないので意図した挙動にならない（TOPページへ飛ばされる）
+
+    ```mjs
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+        trailingSlash: true,
+    };
+
+    export default nextConfig;
+    ```
+
+    `trailingSlash: true`を設定することで期待する挙動になる（各種サブページディレクトリと`index.html`が生成される）<br />
+
+    [Next.jsのSSGのルーティングでリロードすると404](https://zenn.dev/mattak/articles/6880e5b8f02ee5)
+
+- 静的エクスポートしたページの画像（`jpg`など）が表示されない<br />
+    ※ `images: { unoptimized: true, }`することで解決。
+
+    ```mjs
+    /** @type {import('next').NextConfig} */
+    const nextConfig = {
+        images: {
+            unoptimized: true,
+        },
+    };
+
+    export default nextConfig;
+    ```
+
+    [unoptimized](https://nextjs.org/docs/app/api-reference/components/image#unoptimized)
+
+    - ※ おそらくホスティング先（例：Xサーバー）が`Next`の`Image`コンポーネントの画像最適化（[`Image Optimization`](https://nextjs.org/docs/app/building-your-application/optimizing/images)）の処理に対応していないので「画像パスを読み込めず表示されない？」といったことがある？
+
+
+### ESLint
+- `useEffect`の依存関係で警告<br />
+[useEffect has a missing dependencyのwarningを解消する](https://zenn.dev/mackay/articles/1e8fcce329336d )
+
+```ts
+useEffect(() => {
+    /* intersectionobserver */
+    ScrollObserver('section h2', 'OnView', {
+        rootMargin: '-300px 0px'
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
+```
+
+- コンポーネントの命名記述方法<br />
+以下の関数宣言の書き方でないと`ESLint`に怒られる（`Error: Component definition is missing display name  react/display-name`）<br />
+[ESLint で Component definition is missing display name が出たら、コンポーネントに名前を付ける](https://qiita.com/acro5piano/items/1cffa8c6b52a36e6bb73)
+
+```ts
+type hogeType = {
+    urlStr: string;
+    urlPathName: string;
+}
+
+export default function HogeComponent({ props }: { props: hogeType }) {
+    // ...コンポーネントの中身
+}
+
+/* --------------------- memo を使う場合 --------------------- */
+import { memo } from "react";
+
+type hogeType = {
+    urlStr: string;
+    urlPathName: string;
+}
+
+function HogeComponent({ props }: { props: hogeType }) {
+    // ...コンポーネントの中身
+}
+export default memo(HogeComponent);
+```
+
+この記述に変えると読み込み・呼び出し元のコンポーネントでの`import`の記述及び使用方法も変わるので注意
+
+```diff
+- import { HeadingComponent } from '@/app/utils/HeadingComponent';
++ import HeadingComponent from '@/app/utils/HeadingComponent';
+.
+.
+.
+- <HeadingComponent title="よくあるご質問" subTitle="F & Q" />
++ <HeadingComponent props={{
++   title: "よくあるご質問",
++   subTitle: "F & Q"
++ }} />
+```
+
+型によって記述が独特になる
+
+```js
+<ArticlesContentDetail props={{
+    articles: { ...articles }, // 配列
+    detailCheck: detailCheck, // state(bool)
+    setDetailCheck: setDetailCheck, // 上記 state のセッター関数
+}} />
+```
+
+
 ### SupaBase
 [そもそも`supabase`ってなんぞや？](https://qiita.com/kaho_eng/items/8a7faf77222a599fb31c#%E3%81%9D%E3%82%82%E3%81%9D%E3%82%82supabase%E3%81%A3%E3%81%A6%E3%81%AA%E3%82%93%E3%81%9E%E3%82%84)
 
 - `JavaScript`で使う場合<br />
-`npm install @supabase/supabase-js`で`SupaBase`をインストールしておく。
+    `npm install @supabase/supabase-js`で`SupaBase`をインストールしておく。
 
-- `SupaBase`のアクセスに必要な情報は`.env.local`及び`.env`ファイルに記載
+    - `SupaBase`のアクセスに必要な情報は`.env.local`及び`.env`ファイルに記載
 
-- `SupaBase`で作成したテーブルデータの取得（フェッチ）方法は、`SupaBase`のダッシュボードにある「テーブル」-「（右上にある）`API Docs`」から確認可能
+    - `SupaBase`で作成したテーブルデータの取得（フェッチ）方法は、`SupaBase`のダッシュボードにある「テーブル」-「（右上にある）`API Docs`」から確認可能
 
 - `RLS`（Row Level Security）について<br />
 [そもそも`RLS`とはなんぞや？](https://qiita.com/kaho_eng/items/6f9ac01d77ab198881f4#%E3%81%9D%E3%82%82%E3%81%9D%E3%82%82rls%E3%81%A8%E3%81%AF%E3%81%AA%E3%82%93%E3%81%9E%E3%82%84)
@@ -185,7 +372,7 @@ DB内の各種データ（オブジェクト）のidプロパティから各個�
 - `POST`,`PUT`などデータを取り扱う際のデータ名に注意<br />
 テーブルデータ名（`body: JSON.stringify(...`）と（リクエストボディに渡す値の名前）`State`名は **【全く同じ】** にしないと機能しない。
 
-```
+```ts
 const [id, setId] = useState<string>(''); // url
 const [title, setTitle] = useState<string>(''); // タイトル
 const [content, setContent] = useState<string>(''); // 本文
@@ -212,7 +399,114 @@ fetch(`${API_URL}/api/create`, {
 
 
 ### メモ
-- サーバーコンポーネントでの`console.log('ログ出力')`は、ターミナルに表示される
+- `npm run`について<br />
+    > `npm run`とは、`npm scripts`と呼ばれるタスク実行機能を呼び出すコマンドです。機能は一つしかありません。
+    > `package.json`内に書かれたシェルスクリプトを実行するだけ。これだけです。
+
+    参照情報：[フロントエンド開発の３ステップ（npmことはじめ）](https://qiita.com/hashrock/items/15f4a4961183cfbb2658#%E3%83%93%E3%83%AB%E3%83%89%E3%81%AF-npm-run)
+
+    - `./package.json`の中身
+
+    ```json
+    ...
+    ..
+    .
+    "scripts": {
+        "dev": "next dev", // npm run dev = next dev
+        "build": "next build", // npm run build = next build
+        "start": "next start", // npm run start ...
+        "lint": "next lint" // ...
+    },
+    .
+    ..
+    ...
+    ```
+
+- `CssModule`使用時の`querySelector`への要素指定方法<br />
+
+    ```ts
+    // src/app/hooks/header/useNavView.ts
+    import headerStyle from "../../styles/header/header.module.css";
+
+    export const useNavView = () => {
+        const headerBtnAct: () => void = () => {
+            const headerNav = document.querySelector(`.${headerStyle.headerNavArea} nav`);
+            const headerBtn = document.querySelector(`.${headerStyle.headerBtn}`);
+            headerBtn?.classList.toggle(headerStyle.ViewOn);
+            headerNav?.classList.toggle(headerStyle.ViewOn);
+        }
+
+        const removeAct: () => void = () => {
+            const headerNav = document.querySelector(`.${headerStyle.headerNavArea} nav`);
+            const headerBtn = document.querySelector(`.${headerStyle.headerBtn}`);
+            if (headerNav?.classList.contains(headerStyle.ViewOn)) {
+                headerNav?.classList.remove(headerStyle.ViewOn);
+                headerBtn?.classList.remove(headerStyle.ViewOn);
+            }
+        }
+
+        return { headerBtnAct, removeAct }
+    }
+    ```
+
+    - document.querySelector(`.${headerStyle.headerNavArea} nav`)<br />
+    `.classNameElm DOM`という形で絞り込み指定ができる。
+
+    - document.querySelector(`.${headerStyle.headerBtn}`)<br />
+    単数指定は上記の形。
+
+    - `class`関連の記述方法
+
+    ```ts
+    if (headerNav?.classList.contains(headerStyle.ViewOn)) {
+        headerNav?.classList.remove(headerStyle.ViewOn); // headerNav の .ViewOn を削除
+        headerBtn?.classList.remove(headerStyle.ViewOn); // headerBtn の .ViewOn を削除
+    }
+    ```
+
+- `Google Analytics 4`の設置<br />
+[Next.js で作るWebアプリケーションを Google Analytics 4 で解析する（2024年2月）](https://zenn.dev/socialplus/articles/922364f3752647)
+
+- OGP設定<br />
+[App RouterのOGP設定方法まとめ [Next.js]](https://zenn.dev/temasaguru/articles/641a10cd5af02a)<br />
+[opengraph-image and twitter-image](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image)
+
+- `Image`タグ使用時の`Image with src "画像パス" was detected as the Largest Contentful Paint (LCP). Please add the "priority" property if this image is above the fold.`という警告<br />
+画像サイズの大きさで注意を受けているので記載通り、当該`Image`に`priority`を付与する。<br />
+**`priority`を追加しない場合、すべて`lazy`ローディングになる**
+
+
+```ts
+<Image src={targetImg} alt="altTxt" priority />
+```
+
+- `useRouter`<br />
+`useRouter`で1度閲覧したページへ遷移する際は`push`した後に`refresh`しないとキャッシュが効いた状態になる場合があるので注意
+
+- ホスティング先によってはルーティングの設定（`.htaccess`の調整）が必要<br />
+例えば、以下のXサーバーの場合は当該ドメイン（FTPサーバールート）の`.htaccess`にリダイレクト処理を記述しないと存在しないページ（パス）でも通ってしまう（※大抵`index.html` = TOPページへリダイレクトさせられる）ので、別途404リダイレクト処理の設定を追記する必要がある。
+
+```
+# 全てのリクエストに対して、Ngx_Cache_NoCacheModeをoffに設定し、Ngx_Cache_StaticModeを設定します。
+SetEnvIf Request_URI ".*" Ngx_Cache_NoCacheMode=off
+SetEnvIf Request_URI ".*" Ngx_Cache_StaticMode
+
+# HTTPSがオフの場合、全てのリクエストをHTTPSにリダイレクトします。
+RewriteEngine on
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# ファイルが存在しない場合、またはディレクトリでない場合、すべてのリクエストをindex.htmlにリライトします。
+# RewriteEngine On
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^ index.html [QSA,L]
+
+# 404リダイレクト処理を設定（必ず相対パスで指定。サブディレクトリの場合はサブディレクトリからのパスを指定する）
+ErrorDocument 404 /subdir/hoge/404.html
+```
+
+- サーバーコンポーネントでの`console.log('ログ出力')`は**ターミナルに表示**される
 
 - 日時の表示調整<br />
     - new Date(日時に関する変数または処理結果).toLocaleString(); // yyyy/mm/dd hh:mm:ss
@@ -230,9 +524,6 @@ npm install -g yarn // おまけ：yarn のインストール方法
 yarn -v
 ```
 
-- 適当な画像の取得方法<br />
-[Unsplash Sourceを使ってみよう！](https://bagelee.com/design/about-unsplash-source/)
-
 - `json-server`<br />
 `Firebase`や`Supabase`, `PostgreSQL`などのDB、各種サービスを用いた永続的なデータ保存・管理を行うよりも、まずは手軽にデータ保存・管理を行いたい場合に活用できる`npm`ライブラリが[`json-server`](https://www.npmjs.com/package/json-server)。
 
@@ -244,13 +535,14 @@ yarn -v
 
 - `json-server`の起動
     - デフォルト
+
     ```
     npx json-server [filePath/fileName].json --port [portNumber: ex...3001]
     ```
 
     - `package.json`に追記して`npm`コマンドで使用
     
-    ```
+    ```json
     .
     ..
     "scripts": {
@@ -265,26 +557,21 @@ yarn -v
     ```
 
     追記後に`json-server`を立ち上げる
+
     ```
     npm run json-server
     ```
 
 
 ### 備忘録・所感
-- 内部データはフェッチできない（外部データ：API しかフェッチできない）。外部データでも`CORS`でフェッチできない場合もある。
+- 内部データはフェッチできない（外部データ：API しかフェッチできない）。外部データでも`CSR`仕様（`useEffect`を使用した非同期のフェッチ処理など）では`CORS`でフェッチできないが、`SSR`（サーバーコンポーネントとして`fetch api`を使用）だとフェッチできる。
 
 - `next.config.js`で特定サイトからのデータやコンテンツの取得許可を与える
 
-```
+```js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     // nextConfig によって、対象サイト（今回は unsplash ）からの画像データ取得許可を与える
-
-    // The "images.domains" configuration is deprecated. Please use "images.remotePatterns" configuration instead.
-    // images: {
-    //     'domains': ['source.unsplash.com']
-    // }
-    
     images: {
         'remotePatterns': [
             {
