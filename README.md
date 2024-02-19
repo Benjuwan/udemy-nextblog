@@ -216,12 +216,13 @@ DB内の各種データ（オブジェクト）のidプロパティから各個�
     [公式の参照情報](https://nextjs.org/docs/messages/next-image-unconfigured-host)
 
 - サブディレクトリの指定<br />
+    ディレクトリパスの先頭には`/`が必要で、末尾に`/`を付けるとエラーでビルドできないため指定時は注意。
 
     ```js
     /** @type {import('next').NextConfig} */
     const nextConfig = {
-        assetPrefix:  'サブディレクトリ',
-        basePath:  'サブディレクトリ',
+        assetPrefix:  '/サブディレクトリ', // ディレクトリパスの先頭には / が必要で末尾に / を付けるとエラーでビルドできないため指定時は注意
+        basePath:  '/サブディレクトリ', // 同上
         reactStrictMode: true, // Since Next.js 13.4, Strict Mode is true by default with app router, so the above configuration is only necessary for pages router
     };
 
