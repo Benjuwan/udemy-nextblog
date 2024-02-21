@@ -1,7 +1,7 @@
 # Udemy-NextBlog
  [【Next.js13】最新バージョンのNext.js13をマイクロブログ構築しながら基礎と本質を学ぶ講座](https://www.udemy.com/course/nextjs13_learning_with_microblog/)<br />
 
-※本`README`に記載されている一部は、カリキュラム終了後に筆者が制作した`Next`プロジェクトを通じて得た情報も含まれています。
+※本`README`に記載されている一部はカリキュラム終了後に筆者が制作した`Next`プロジェクトを通じて得た情報も含まれています。
 
 
 ## 目次
@@ -111,6 +111,24 @@ export default HogePage; // パスカルケース
     // Similar to `getStaticProps` with the `revalidate` option --- to Next 12.
     fetch(URL, { next: { revalidate: 10 } }); // --- from Next 13 against ISR
     ```
+
+- `Next.js`では`public`ディレクトリ（フォルダ）で **すべての静的データを管理する** 形のため、CSSの値でURLにパス指定する再は`public`直下からの指定となる<br />
+
+``` css
+.something_elements {
+    /* (public)/img/something.jpg */
+    background: url('/img/something.jpg') no-repeat center/cover;
+}
+```
+
+参考情報：[【Next.js】background-imageが表示されない](https://zenn.dev/milkandhoney995/articles/1fda5d82b44306)
+
+- `pdf`ファイルなどは`Link`の`href`に直接（`public`直下から）指定する<br />
+
+``` jsx
+/* (public)/pdf/documents/abouthogefoo.pdf */
+<Link href="/pdf/documents/abouthogefoo.pdf" target="_blank">hogefooに関するpdfドキュメント</Link>
+```
 
 - エラーページ（※ファイル名は`error.tsx`で固定）<br />
 `app/error.tsx`という配置（フォルダ構成）にしないと機能しない。
