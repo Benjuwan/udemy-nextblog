@@ -131,9 +131,12 @@ export default HogePage; // パスカルケース
 ```
 
 - エラーページ（※ファイル名は`error.tsx`で固定）<br />
-`app/error.tsx`という配置（フォルダ構成）にしないと機能しない。
+[Error Handling](https://nextjs.org/docs/app/building-your-application/routing/error-handling)
 
-- `not-found` / `loading` ページも**ファイル名固定（`not-found.tsx` / `loading.tsx`）は同様**だが、これらは各ディレクトリごとに配置できる。
+- `not-found.tsx` / `loading.tsx`（※ファイル名固定）<br />
+[not-found.js](https://nextjs.org/docs/app/api-reference/file-conventions/not-found)
+[loading.js](https://nextjs.org/docs/app/api-reference/file-conventions/loading)
+[Loading UI and Streaming](https://nextjs.org/docs/app/building-your-application/routing/loading-ui-and-streaming)
 
 - `Next`の方針に沿って**極力サーバーコンポーネントで扱いたい**<br />
 処理（`click`, `submit`など各種イベントハンドラーの使用はクライアントコンポーネントでしか不可能）によってクライアントコンポーネントにしなくてはならない場合はコンポーネントを別途作成する（親：サーバーコンポーネント、子：クライアントコンポーネント）<br />
@@ -156,6 +159,10 @@ export default ArticleDetails;
 
 `{ params }: { params: { id: string } }`<br />
 DB内の各種データ（オブジェクト）のidプロパティから各個別ページのURLを取得
+
+- サイトマップの作成<br />
+`Next.js`では所定のファイル（`sitemap.(js|ts)`）を設けることでサイトマップを生成してくれる。<br />
+[Generating a sitemap using code (.js, .ts)](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap#generating-a-sitemap-using-code-js-ts)
 
 - **Next12 までの（Next13 以降でも使える）** APIの作成方法（`pages/api`）<br />
 `pages/api`に`index.ts`を用意して`API`作成を行う。
