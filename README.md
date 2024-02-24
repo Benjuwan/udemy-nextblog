@@ -499,6 +499,13 @@ fetch(`${API_URL}/api/create`, {
 - `useRouter`<br />
 `useRouter`で1度閲覧したページへ遷移する際は`push`した後に`refresh`しないとキャッシュが効いた状態になる場合があるので注意
 
+- `React`でのカスタムデータ属性の指定は`low-case`で<br />
+`low-case`で指定しないとエラーが出る（`React`に怒られる）
+
+```jsx
+<li key={i} data-daydate={day.dayDateNum} ...
+```
+
 - **ホスティング先によってはルーティングの設定（`.htaccess`の調整）が必要**<br />
     例えば、以下のXサーバーの場合は当該ドメイン（FTPサーバールート）の`.htaccess`にリダイレクト処理を記述しないと存在しないページ（パス）でも通ってしまう（※`index.html` = TOPページへリダイレクトさせられる）ので、別途404リダイレクト処理の設定を追記する必要がある。
 
