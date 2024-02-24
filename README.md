@@ -134,8 +134,8 @@ export default HogePage; // パスカルケース
 [Error Handling](https://nextjs.org/docs/app/building-your-application/routing/error-handling)
 
 - `not-found.tsx` / `loading.tsx`（※ファイル名固定）<br />
-[not-found.js](https://nextjs.org/docs/app/api-reference/file-conventions/not-found)
-[loading.js](https://nextjs.org/docs/app/api-reference/file-conventions/loading)
+[not-found.js](https://nextjs.org/docs/app/api-reference/file-conventions/not-found)<br />
+[loading.js](https://nextjs.org/docs/app/api-reference/file-conventions/loading)<br />
 [Loading UI and Streaming](https://nextjs.org/docs/app/building-your-application/routing/loading-ui-and-streaming)
 
 - `Next`の方針に沿って**極力サーバーコンポーネントで扱いたい**<br />
